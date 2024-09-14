@@ -1,0 +1,20 @@
+<div class="login-container">
+    <div class="login-card">
+      <h2>Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" type="email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" formControlName="password" type="password" />
+        </div>
+        <button type="submit" [disabled]="loginForm.invalid">Login</button>
+        <div class="forgot-password">
+          <a routerLink="/forget-password">Forgot Password?</a>
+        </div>
+      </form>
+    </div>
+</div>
+  
