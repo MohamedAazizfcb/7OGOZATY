@@ -17,6 +17,8 @@ namespace Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ILookupService, LookupService>();
+            services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             return services;

@@ -10,6 +10,6 @@ namespace Domain.Dtos.Appointment
     public class ChangeAppointmentDoctorRequest
     {
         public string DoctorId { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public string SlotId { get; set; }
     }
 }

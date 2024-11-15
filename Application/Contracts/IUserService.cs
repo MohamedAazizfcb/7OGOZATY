@@ -14,6 +14,5 @@ namespace Application.Contracts
         public Response<GetUserResponse[]> GetAll();
         public Response<GetUserResponse> Get(int id);
         public Response<GetUserResponse> Update(int id, UpdateUserRequest request);
-
     }
 }

@@ -19,7 +19,7 @@ namespace Domain.Dtos.User
         public AccountStatus AccountStatus { get; set; }
         public UserRole UserRole { get; set; }
         public string Address { get; set; }
-        public Gender gender { get; set; }
+        public string gender { get; set; }
         public string PhoneNumber { get; set; }
     }
 }

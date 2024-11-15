@@ -54,28 +54,45 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowLocalhost", builder =>
+//    {
+//        builder.WithOrigins("http://localhost:4200") // Replace with your Angular frontend port
+//               .AllowAnyHeader()
+//               .AllowAnyMethod()
+//               .AllowCredentials();
+//    });
+//});
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("_AllowAnyOriginPolicy",
+    options.AddPolicy("AllowAllOrigins",
         builder =>
         {
             builder.AllowAnyOrigin();
-            builder.AllowAnyHeader();
             builder.AllowAnyMethod();
+            builder.AllowAnyHeader();
         });
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
+
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();  // This will serve files from wwwroot
+
 
 app.UseAuthentication();
 

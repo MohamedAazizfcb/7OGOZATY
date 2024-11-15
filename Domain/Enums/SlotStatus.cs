@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Enums
 {
-    public class Item
+    public enum SlotStatus
     {
-       
+        Free,
+        Occupied,
+        Cancelled
     }
 }

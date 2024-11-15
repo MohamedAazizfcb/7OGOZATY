@@ -26,6 +26,7 @@ namespace Domain.Entities
         public AccountStatus AccountStatus { get; set; }
         public UserRole UserRole { get; set; }
         public string Address { get; set; }
-        public Gender gender { get; set; }
+        public int gender { get; set; }
+        public List<ScheduleDetail> Schedule { get; set; } = new List<ScheduleDetail>();
     }
 }

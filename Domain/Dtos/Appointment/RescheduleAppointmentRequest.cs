@@ -9,6 +9,6 @@ namespace Domain.Dtos.Appointment
 {
     public class RescheduleAppointmentRequest
     {
-        public DateTime AppointmentDate { get; set; }
+        public string SlotId { get; set; }
     }
 }

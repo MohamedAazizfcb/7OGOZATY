@@ -7,11 +7,11 @@ namespace Application.Contracts
     {
         Task<Response<GetAppointmentResponse>> Add(AddAppointmentRequest request);
         Task<Response<GetAppointmentResponse[]>> GetAll();
-        Task<Response<GetAppointmentResponse>> Get(int appointmentId);
-        Task<Response<string>> AcceptAppointment(int appointmentId);
-        Task<Response<string>> RejectAppointment(int appointmentId);
-        Task<Response<string>> CancelAppointment(int appointmentId);
-        Task<Response<GetAppointmentResponse>> Reschedule(int appointmentId, RescheduleAppointmentRequest request);
-        Task<Response<GetAppointmentResponse>> ChangeDoctor(int appointmentId, ChangeAppointmentDoctorRequest request);
+        Task<Response<GetAppointmentResponse>> Get(string appointmentId);
+        Task<Response<string>> AcceptAppointment(string appointmentId);
+        Task<Response<string>> RejectAppointment(string appointmentId);
+        Task<Response<string>> CancelAppointment(string appointmentId);
+        Task<Response<GetAppointmentResponse>> Reschedule(string appointmentId, RescheduleAppointmentRequest request);
+        Task<Response<GetAppointmentResponse>> ChangeDoctor(string appointmentId, ChangeAppointmentDoctorRequest request);
     }
 }

@@ -31,42 +31,42 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{appointmentId}/get")]
-        public async Task<IActionResult> Get([FromRoute] int appointmentId)
+        public async Task<IActionResult> Get([FromRoute] string appointmentId)
         {
             var result = await _appointmentService.Get(appointmentId);
             return NewResult(result);
         }
 
         [HttpPut("{appointmentId}/accept")]
-        public async Task<IActionResult> AcceptAppointment([FromRoute] int appointmentId)
+        public async Task<IActionResult> AcceptAppointment([FromRoute] string appointmentId)
         {
             var result = await _appointmentService.AcceptAppointment(appointmentId);
             return NewResult(result);
         }
 
         [HttpPut("{appointmentId}/reject")]
-        public async Task<IActionResult> RejectAppointment([FromRoute] int appointmentId)
+        public async Task<IActionResult> RejectAppointment([FromRoute] string appointmentId)
         {
             var result = await _appointmentService.RejectAppointment(appointmentId);
             return NewResult(result);
         }
 
         [HttpPut("{appointmentId}/cancel")]
-        public async Task<IActionResult> CancelAppointment([FromRoute] int appointmentId)
+        public async Task<IActionResult> CancelAppointment([FromRoute] string appointmentId)
         {
             var result = await _appointmentService.CancelAppointment(appointmentId);
             return NewResult(result);
         }
 
         [HttpPut("{appointmentId}/reschedule")]
-        public async Task<IActionResult> Reschedule([FromRoute] int appointmentId, [FromBody] RescheduleAppointmentRequest request)
+        public async Task<IActionResult> Reschedule([FromRoute] string appointmentId, [FromBody] RescheduleAppointmentRequest request)
         {
             var result = await _appointmentService.Reschedule(appointmentId, request);
             return NewResult(result);
         }
 
         [HttpPut("{appointmentId}/changeDoctor")]
-        public async Task<IActionResult> ChangeDoctor([FromRoute] int appointmentId, [FromBody] ChangeAppointmentDoctorRequest request)
+        public async Task<IActionResult> ChangeDoctor([FromRoute] string appointmentId, [FromBody] ChangeAppointmentDoctorRequest request)
         {
             var result = await _appointmentService.ChangeDoctor(appointmentId, request);
             return NewResult(result);

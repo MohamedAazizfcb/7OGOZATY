@@ -10,18 +10,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Implementations
 {
-    internal class AppointmentService : ResponseHandler, IAppointmentService
+    public class AppointmentService : ResponseHandler, IAppointmentService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IDoctorService _doctorService;
 
-        public AppointmentService(ApplicationDbContext context, IMapper mapper)
+        public AppointmentService(ApplicationDbContext context, IMapper mapper, IDoctorService doctorService)
         {
             _context = context;
             _mapper = mapper;
+            _doctorService = doctorService;
         }
 
-        private async Task<Appointment> UpdateAppointmentStatus(int appointmentId, AppointmentStatus newStatus)
+        private async Task<Appointment> UpdateAppointmentStatus(string appointmentId, AppointmentStatus newStatus)
         {
             var appointment = await _context.Appointments.FindAsync(appointmentId);
 
@@ -44,14 +46,16 @@ namespace Application.Implementations
         {
             var appointment = new Appointment
             {
+                Id = DateTime.Now.ToString(),
                 PatientId = request.PatientId,
                 DoctorId = request.DoctorId,
-                AppointmentDate = request.AppointmentDate,
+                slotId = request.SlotId,
                 Status = AppointmentStatus.Pending,
                 CreatedAt = DateTime.UtcNow
             };
 
             _context.Appointments.Add(appointment);
+            await _doctorService.ChangeSlotStatus(appointment.slotId, SlotStatus.Occupied);
             await _context.SaveChangesAsync();
 
             return Created(_mapper.Map<GetAppointmentResponse>(appointment));
@@ -97,7 +101,7 @@ namespace Application.Implementations
                     Id = appoint.Id,
                     PatientName = patientName,
                     DoctorName = doctorName,
-                    AppointmentDate = appoint.AppointmentDate,
+                    Slot = appoint.Slot,
                     Status = appoint.Status
                 };
             }).ToArray();
@@ -106,7 +110,7 @@ namespace Application.Implementations
         }
 
 
-        public async Task<Response<GetAppointmentResponse>> Get(int appointmentId)
+        public async Task<Response<GetAppointmentResponse>> Get(string appointmentId)
         {
             // Retrieve the appointment including patient and doctor
             var appointment = await _context.Appointments
@@ -128,7 +132,7 @@ namespace Application.Implementations
                 PatientName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}",
                 DoctorId = appointment.DoctorId,
                 DoctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}",
-                AppointmentDate = appointment.AppointmentDate,
+                Slot = appointment.Slot,
                 Status = appointment.Status
             };
 
@@ -137,7 +141,7 @@ namespace Application.Implementations
         }
 
 
-        public async Task<Response<string>> AcceptAppointment(int appointmentId)
+        public async Task<Response<string>> AcceptAppointment(string appointmentId)
         {
             var appointment = await UpdateAppointmentStatus(appointmentId, AppointmentStatus.Accepted);
             if(appointment == null)
@@ -150,31 +154,33 @@ namespace Application.Implementations
 
         }
 
-        public async Task<Response<string>> RejectAppointment(int appointmentId)
+        public async Task<Response<string>> RejectAppointment(string appointmentId)
         {
             var appointment = await UpdateAppointmentStatus(appointmentId, AppointmentStatus.Rejected);
             if (appointment == null)
             {
                 return NotFound<string>();
             }
+            await _doctorService.ChangeSlotStatus(appointment.slotId, SlotStatus.Free);
 
             // Return response
             return Success("Success");
         }
 
-        public async Task<Response<string>> CancelAppointment(int appointmentId)
+        public async Task<Response<string>> CancelAppointment(string appointmentId)
         {
             var appointment = await UpdateAppointmentStatus(appointmentId, AppointmentStatus.Cancelled);
             if (appointment == null)
             {
                 return NotFound<string>();
             }
+            await _doctorService.ChangeSlotStatus(appointment.slotId, SlotStatus.Cancelled);
 
             // Return response
             return Success("Success");
         }
 
-        public async Task<Response<GetAppointmentResponse>> Reschedule(int appointmentId, RescheduleAppointmentRequest request)
+        public async Task<Response<GetAppointmentResponse>> Reschedule(string appointmentId, RescheduleAppointmentRequest request)
         {
             var appointment = await _context.Appointments.FindAsync(appointmentId);
 
@@ -182,8 +188,12 @@ namespace Application.Implementations
             {
                 return NotFound<GetAppointmentResponse>();
             }
+            await _doctorService.ChangeSlotStatus(appointment.slotId, SlotStatus.Free); //old slot
 
-            appointment.AppointmentDate = request.AppointmentDate;
+            appointment.slotId = request.SlotId;
+
+            await _doctorService.ChangeSlotStatus(appointment.slotId, SlotStatus.Occupied); //new slot
+
             await _context.SaveChangesAsync();
             // Retrieve the appointment including patient and doctor
             var appointmentResul = await _context.Appointments
@@ -205,13 +215,13 @@ namespace Application.Implementations
                 PatientName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}",
                 DoctorId = appointment.DoctorId,
                 DoctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}",
-                AppointmentDate = appointment.AppointmentDate,
+                Slot = appointment.Slot,
                 Status = appointment.Status
             };
             return Success(appointmentResponse);
         }
 
-        public async Task<Response<GetAppointmentResponse>> ChangeDoctor(int appointmentId, ChangeAppointmentDoctorRequest request)
+        public async Task<Response<GetAppointmentResponse>> ChangeDoctor(string appointmentId, ChangeAppointmentDoctorRequest request)
         {
             var appointment = await _context.Appointments.FindAsync(appointmentId);
 
@@ -242,7 +252,7 @@ namespace Application.Implementations
                 PatientName = $"{appointment.Patient.FirstName} {appointment.Patient.LastName}",
                 DoctorId = appointment.DoctorId,
                 DoctorName = $"{appointment.Doctor.FirstName} {appointment.Doctor.LastName}",
-                AppointmentDate = appointment.AppointmentDate,
+                Slot = appointment.Slot,
                 Status = appointment.Status
             };
             return Success(appointmentResponse);

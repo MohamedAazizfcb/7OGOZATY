@@ -9,12 +9,13 @@ namespace Domain.Entities
 {
     public class Appointment
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string PatientId { get; set; }
         public User Patient { get; set; }
         public string DoctorId { get; set; }
         public User Doctor { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public string slotId { get; set; }  // Foreign key
+        public ScheduleDetail Slot { get; set; }  // Navigation property
         public AppointmentStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }

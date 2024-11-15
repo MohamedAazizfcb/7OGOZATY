@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace Domain.Dtos.Appointment
     {
         public string PatientId { get; set; }
         public string DoctorId { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public string SlotId { get; set; }
     }
 }

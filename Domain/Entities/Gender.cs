@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class School
+    public class Gender
     {
+        public int Id { get; set; }
+        public string NameAr { get; set; }
+        public string NameEn { get; set; }
     }
 }

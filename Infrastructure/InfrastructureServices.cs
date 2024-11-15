@@ -11,7 +11,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
-            var ConnectionString = "Server = localhost; Database = Kotobi; User = root; Password =;";
+            var ConnectionString = "Server = 89.58.39.164; Port = 3306; Database = hogozati; User = tamer; Password =12345;";
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString));
@@ -20,3 +20,4 @@ namespace Infrastructure
         }
     }
 }
+

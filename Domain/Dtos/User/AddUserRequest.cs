@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace Domain.Dtos.User
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateOnly DateOfBirth { get; set; }
-        public string ProfilePicture { get; set; }
+        public IFormFile ProfilePicture { get; set; }
         public string Address { get; set; }
-        public Gender gender { get; set; }
+        public int gender { get; set; }
         public string PhoneNumber { get; set; }
     }
 }

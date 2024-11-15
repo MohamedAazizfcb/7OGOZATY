@@ -18,7 +18,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] AddUserRequest request)
+        public async Task<IActionResult> RegisterAsync([FromForm] AddUserRequest request)
         {
             var result = await _authService.RegisterAsync(request);
             return NewResult(result);
