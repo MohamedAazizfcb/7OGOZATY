@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.IdentityUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace Application.Contracts
 {
     public interface IJwtTokenService
     {
-        Task<string> GenerateTokenAsync(User user);
+        Task<string> GenerateTokenAsync(ApplicationUser user);
     }
 }

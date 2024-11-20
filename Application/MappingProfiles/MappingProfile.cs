@@ -3,6 +3,7 @@ using Domain.Dtos.Appointment;
 using Domain.Dtos.Auth;
 using Domain.Dtos.User;
 using Domain.Entities;
+using Domain.Entities.IdentityUser;
 
 namespace Application.MappingProfiles
 {
@@ -10,11 +11,11 @@ namespace Application.MappingProfiles
     {
         public MappingProfile()
         {
-            CreateMap<AddUserRequest, User>();
-            CreateMap<UpdateUserRequest, User>();
-            CreateMap<User, AuthResponse>()
+            CreateMap<AddUserRequest, ApplicationUser>();
+            CreateMap<UpdateUserRequest, ApplicationUser>();
+            CreateMap<ApplicationUser, AuthResponse>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
-            CreateMap<User, GetUserResponse>()
+            CreateMap<ApplicationUser, GetUserResponse>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
 
 

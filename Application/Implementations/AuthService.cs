@@ -2,7 +2,7 @@
 using AutoMapper;
 using Domain.Dtos.Auth;
 using Domain.Dtos.User;
-using Domain.Entities;
+using Domain.Entities.IdentityUser;
 using Domain.Enums;
 using Domain.Results;
 using Domain.Wrappers;
@@ -13,12 +13,12 @@ namespace Application.Implementations
 {
     public class AuthService : ResponseHandler, IAuthService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IMapper _mapper;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenService jwtTokenService, IMapper mapper)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IJwtTokenService jwtTokenService, IMapper mapper)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
@@ -50,11 +50,11 @@ namespace Application.Implementations
         public async Task<Response<AuthResponse>> RegisterAsync(AddUserRequest request)
         {
             // Map the user details from the request
-            var user = _mapper.Map<User>(request);
+            var user = _mapper.Map<ApplicationUser>(request);
             user.CreatedAt = DateTime.Now;
             user.LastLogin = DateTime.Now;
             user.AccountStatus = AccountStatus.Active;
-            user.UserRole = UserRole.Patient;
+            user.UserRole = UserRoles.Patient;
 
             // Handle ProfilePicture upload if available
             if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)

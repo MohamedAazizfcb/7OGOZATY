@@ -1,48 +1,108 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    sealed public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
-        public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Gender> Genders { get; set; }
-        public DbSet<ScheduleDetail> ScheduleDetails { get; set; }
+        private readonly string _userId;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, string userId)
             : base(options)
         {
+            _userId = userId;
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        public override int SaveChanges()
         {
-            base.OnModelCreating(builder);
+            ApplyCommonActionsBeforeSave();
+            return base.SaveChanges();
+        }
 
-            builder.Entity<Appointment>()
-                .HasOne(a => a.Patient)
-                .WithMany()
-                .HasForeignKey(a => a.PatientId);
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            ApplyCommonActionsBeforeSave();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
 
-            builder.Entity<Appointment>()
-                .HasOne(a => a.Doctor)
-                .WithMany()
-                .HasForeignKey(a => a.DoctorId);
+        private void ApplyCommonActionsBeforeSave()
+        {
+            // Detect changes in entities
+            this.ChangeTracker.DetectChanges();
 
-            builder.Entity<User>()
-               .HasMany(s => s.Schedule)
-               .WithOne()
-               .OnDelete(DeleteBehavior.Cascade); // Optional: Configure cascade delete if needed
+            // Iterate over added entities and apply the added properties
+            var addedEntities = this.ChangeTracker.Entries()
+                                    .Where(t => t.State == EntityState.Added)
+                                    .Select(t => t.Entity);
 
-            builder.Entity<Appointment>()
-                .HasOne(a => a.Slot)
-                .WithOne()
-                .HasForeignKey<Appointment>(a => a.slotId)
-                .OnDelete(DeleteBehavior.Restrict);  // Optional: Prevent cascade delete if needed
+            foreach (var entity in addedEntities)
+            {
+                SetCreatedValues(entity);
+            }
 
+            // Iterate over modified entities and apply the updated properties
+            var modifiedEntities = this.ChangeTracker.Entries()
+                                    .Where(t => t.State == EntityState.Modified)
+                                    .Select(t => t.Entity);
 
+            foreach (var entity in modifiedEntities)
+            {
+                SetUpdatedValues(entity);
+            }
+        }
+
+        private void SetCreatedValues(object entity)
+        {
+            SetEntityProperty(entity, "CreatedDate", DateTime.UtcNow);
+            SetEntityProperty(entity, "CreatedBy", _userId);
+            SetEntityProperty(entity, "IsActive", true);
+            SetEntityProperty(entity, "IsDeleted", false);
+            SetIsSystem(entity);
+        }
+
+        private void SetUpdatedValues(object entity)
+        {
+            SetEntityProperty(entity, "UpdateDate", DateTime.UtcNow);
+            SetEntityProperty(entity, "UpdatedBy", _userId);
+
+            // Handle deletion scenario
+            if (IsEntityMarkedAsDeleted(entity))
+            {
+                SetDeletedValues(entity);
+            }
+        }
+
+        private void SetDeletedValues(object entity)
+        {
+            SetEntityProperty(entity, "DeletedBy", _userId);
+        }
+
+        private void SetIsSystem(object entity)
+        {
+            bool isSystem = _userId == "System";
+            SetEntityProperty(entity, "IsSystem", isSystem);
+        }
+
+        private bool IsEntityMarkedAsDeleted(object entity)
+        {
+            var isDeleted = GetEntityProperty(entity, "IsDeleted");
+            return isDeleted is bool deleted && deleted;
+        }
+
+        private void SetEntityProperty(object entity, string propertyName, object value)
+        {
+            var property = entity.GetType().GetProperty(propertyName);
+            if (property != null && property.CanWrite)
+            {
+                property.SetValue(entity, value);
+            }
+        }
+
+        private object GetEntityProperty(object entity, string propertyName)
+        {
+            var property = entity.GetType().GetProperty(propertyName);
+            return property?.GetValue(entity);
         }
     }
-
 }

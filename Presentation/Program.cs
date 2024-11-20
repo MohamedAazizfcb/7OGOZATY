@@ -1,6 +1,6 @@
 using Application;
 using Domain;
-using Domain.Entities;
+using Domain.Entities.IdentityUser;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,7 +21,7 @@ builder.Services.AddDomainServices()
     .AddApplicationServices()
     .AddInfrastructureServices();
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 

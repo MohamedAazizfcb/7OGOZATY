@@ -17,7 +17,7 @@ namespace Domain.Dtos.User
         public DateTime CreatedAt { get; set; }
         public DateTime LastLogin { get; set; }
         public AccountStatus AccountStatus { get; set; }
-        public UserRole UserRole { get; set; }
+        public UserRoles UserRole { get; set; }
         public string Address { get; set; }
         public string gender { get; set; }
         public string PhoneNumber { get; set; }
