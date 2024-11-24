@@ -1,5 +1,6 @@
 ﻿using Dapper;
-using Infrastructure.DataBase;
+using Domain.Interfaces.SPCallInterfaces;
+using Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
 

@@ -1,7 +1,10 @@
-﻿using Infrastructure.DataBase;
-using Infrastructure.DataUnitOfWork.Implementations;
-using Infrastructure.DataUnitOfWork.Interfaces;
+﻿using Domain.Interfaces.SPCallInterfaces;
+using Domain.Interfaces.UnitOfWorkInterfaces;
+using Domain.Interfaces.UtilityInterfaces.MimeTypesInterfaces;
+using Infrastructure.Data;
 using Infrastructure.StoredProcedureCall;
+using Infrastructure.UnitOfWorkImplementation;
+using Infrastructure.Utility.MimeTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +22,9 @@ namespace Infrastructure
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISPCall, SPCall>();
+
+            services.AddSingleton<IMimeTypesLoader>(new FileMimeTypesLoader("MimeTypes.json"));
+            services.AddSingleton<IMimeTypesService, MimeTypes>();
 
             return services;
         }
