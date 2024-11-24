@@ -1,10 +1,11 @@
-﻿using Infrastructure.Data;
+﻿using Infrastructure.DataBase;
+using Infrastructure.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Repository.Implementations
 {
-    public partial class GenericRepository<T> where T : class
+    public partial class GenericRepository<T>: IGenericRepository<T> where T : class
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace Infrastructure.Data.Seeds
+namespace Infrastructure.Seeds
 {
     public static class RoleSeeds
     {

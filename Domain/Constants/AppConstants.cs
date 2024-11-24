@@ -10,6 +10,9 @@ namespace Domain.Constants
     {
         public const string Permission = "Permission";
 
+        public static string wwwroot = "wwwroot\\";
+
+
         //public const string roles = "roles";
 
         //public const string descending = "descending";
@@ -18,7 +21,6 @@ namespace Domain.Constants
 
         //public static string BaseUrl = "https://localhost:7053/";
 
-        //public static string wwwroot = "wwwroot\\";
 
         //public static string TempUploadPath = "Temp";
 

@@ -1,6 +1,7 @@
-﻿using Domain.Entities;
-using Infrastructure.Data;
-using Microsoft.AspNetCore.Hosting.Server;
+﻿using Infrastructure.DataBase;
+using Infrastructure.DataUnitOfWork.Implementations;
+using Infrastructure.DataUnitOfWork.Interfaces;
+using Infrastructure.StoredProcedureCall;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,9 @@ namespace Infrastructure
             {
                 options.UseMySql(DbConnection.DefaultConnection, ServerVersion.AutoDetect(DbConnection.DefaultConnection));
             });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ISPCall, SPCall>();
 
             return services;
         }

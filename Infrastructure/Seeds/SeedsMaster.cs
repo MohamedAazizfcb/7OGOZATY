@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.User;
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Data.Seeds
+namespace Infrastructure.Seeds
 {
     public static class SeedsMaster
     {

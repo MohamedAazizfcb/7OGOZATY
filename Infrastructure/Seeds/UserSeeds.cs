@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Data;
 
-namespace Infrastructure.Data.Seeds
+namespace Infrastructure.Seeds
 {
     public static class UserSeeds
     {
@@ -13,7 +13,7 @@ namespace Infrastructure.Data.Seeds
         {
             var users = ImmutableList<ApplicationUser>.Empty.Add(GetAdminUser());
 
-           foreach (var user in users)
+            foreach (var user in users)
             {
                 var newUser = await userManager.FindByEmailAsync(user.Email!);
                 if (newUser is null)
@@ -28,10 +28,10 @@ namespace Infrastructure.Data.Seeds
         {
             return new ApplicationUser()
             {
-                Email="mohamedaazizfcb@gmail.com",
-                UserName="MohamedAaziz",
-                FirstName="Mohamed",
-                LastName="Aaziz"
+                Email = "mohamedaazizfcb@gmail.com",
+                UserName = "MohamedAaziz",
+                FirstName = "Mohamed",
+                LastName = "Aaziz"
             };
         }
 

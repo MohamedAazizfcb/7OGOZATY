@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data
+namespace Infrastructure.DataBase
 {
     sealed public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
-        private readonly string _userId;
+        public string _userId = string.Empty;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, string userId)
             : base(options)
