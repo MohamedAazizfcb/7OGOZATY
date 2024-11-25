@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Dtos.Appointment
+namespace Application.Dtos.Appointment
 {
-    public class RescheduleAppointmentRequest
+    public class ChangeAppointmentDoctorRequest
     {
+        public string DoctorId { get; set; }
         public string SlotId { get; set; }
     }
 }

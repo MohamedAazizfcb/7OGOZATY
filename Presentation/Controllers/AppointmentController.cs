@@ -1,13 +1,11 @@
 ﻿using Application.Contracts;
-using Domain.Dtos.Appointment;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Base;
 
 namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AppointmentController : AppControllerBase
+    public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
 

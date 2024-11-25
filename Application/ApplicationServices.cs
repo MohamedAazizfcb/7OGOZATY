@@ -1,5 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Implementations;
+using Application.Services;
+using Domain.Interfaces.CommonInterfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,11 @@ namespace Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddScoped<IResponseService, ResponseService>();
+
+
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ILookupService, LookupService>();

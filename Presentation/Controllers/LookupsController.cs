@@ -10,7 +10,7 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LookupsController : AppControllerBase
+    public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
 

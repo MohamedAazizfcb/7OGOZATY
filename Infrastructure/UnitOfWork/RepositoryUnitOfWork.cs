@@ -4,7 +4,7 @@ using Infrastructure.Repository.Implementations;
 
 namespace Infrastructure.UnitOfWorkImplementation
 {
-    public partial class UnitOfWork : IRepositoriesUnitOfWork
+    public partial class UnitOfWork : IRepositoryUnitOfWork
     {
         public IGenericRepository<T> GetRepository<T>() where T : class
         {

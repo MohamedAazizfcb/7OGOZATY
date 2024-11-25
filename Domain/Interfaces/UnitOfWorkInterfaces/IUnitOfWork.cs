@@ -2,7 +2,7 @@
 {
     public interface IUnitOfWork :
         ISaveUnitOfWork,
-        IRepositoriesUnitOfWork,
+        IRepositoryUnitOfWork,
         IDisposeUnitOfWork
     {
     }

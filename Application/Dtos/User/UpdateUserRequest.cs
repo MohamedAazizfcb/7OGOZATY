@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Dtos.User
+namespace Application.Dtos.User
 {
     public class UpdateUserRequest
     {

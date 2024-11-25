@@ -2,7 +2,7 @@
 
 namespace Domain.Interfaces.UnitOfWorkInterfaces
 {
-    public interface IRepositoriesUnitOfWork
+    public interface IRepositoryUnitOfWork
     {
         IGenericRepository<T> GetRepository<T>() where T : class;
     }

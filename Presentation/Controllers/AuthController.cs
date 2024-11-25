@@ -8,7 +8,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : AppControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
 
