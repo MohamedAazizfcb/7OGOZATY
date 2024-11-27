@@ -1,7 +1,8 @@
 ﻿using Application.Contracts;
+using Application.Factories;
 using Application.Implementations;
-using Application.Services;
 using Domain.Interfaces.CommonInterfaces;
+using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,10 @@ namespace Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IResponseService, ResponseService>();
 
+
+            services.AddScoped<IOperationResultFactory, OperationResultFactory>();
+            services.AddScoped<IApiResponseFactory, ApiResponseFactory>();
 
 
             services.AddScoped<IUserService, UserService>();

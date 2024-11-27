@@ -3,11 +3,11 @@ using System.Net;
 using Domain.Results;
 using Domain.Interfaces.CommonInterfaces;
 
-namespace Application.Services
+namespace Application.Factories
 {
-    public class ResponseService : IResponseService
+    public class ApiResponseFactory : IApiResponseFactory
     {
-        public ObjectResult CreateResponse<T>(Response<T> response)
+        public ObjectResult CreateApiResponse<T>(OperationResultBase<T> response)
         {
             ObjectResult result;
 
