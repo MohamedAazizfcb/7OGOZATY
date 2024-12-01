@@ -1,11 +1,18 @@
 ﻿using Domain.Interfaces.GenericrRepositoryInterfaces;
+
 namespace Infrastructure.Repository.Implementations
 {
-    public partial class GenericRepository<T>: IUpdateRepository<T>
+    public partial class GenericRepository<T> : IUpdateRepository<T> where T : class
     {
-        public void Update(T entity)
+        public async Task<T> UpdateAsync(int id, T updatedEntity)
         {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null) return null!;
+
+            UpdateEntityFromDto(entity, updatedEntity);
             _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public T Update(int id, T updatedEntity)
@@ -15,6 +22,7 @@ namespace Infrastructure.Repository.Implementations
 
             UpdateEntityFromDto(entity, updatedEntity);
             _dbSet.Update(entity);
+            _context.SaveChanges();
             return entity;
         }
 

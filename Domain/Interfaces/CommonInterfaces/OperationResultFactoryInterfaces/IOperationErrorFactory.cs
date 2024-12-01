@@ -4,11 +4,11 @@ namespace Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces
 {
     public interface IOperationErrorFactory
     {
-        OperationResultBase<T> Unauthorized<T>();
-        OperationResultBase<T> BadRequest<T>(string message = "Bad Request");
-        OperationResultBase<T> BadRequest<T>(List<string> errors);
-        OperationResultBase<T> NotFound<T>(string message = "Not Found");
-        OperationResultBase<T> Conflict<T>(string message = "Conflict");
-        OperationResultBase<T> InternalServerError<T>(string message = "Internal Server Error");s
+        OperationResultSingle<T> Unauthorized<T>();
+        OperationResultSingle<T> BadRequest<T>(string message = "Bad Request");
+        OperationResultSingle<T> BadRequest<T>(List<string> errors);
+        OperationResultSingle<T> NotFound<T>(string message = "Not Found");
+        OperationResultSingle<T> Conflict<T>(string message = "Conflict");
+        OperationResultSingle<T> InternalServerError<T>(string message = "Internal Server Error");
     }
 }

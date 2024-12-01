@@ -2,6 +2,7 @@
 {
     public interface IUpdateRepository<T> where T : class
     {
-        void Update(T entity);
+        Task<T> UpdateAsync(int id, T updatedEntity);
+        T Update(int id, T updatedEntity);
     }
 }

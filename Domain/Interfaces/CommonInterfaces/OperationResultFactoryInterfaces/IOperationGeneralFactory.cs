@@ -4,9 +4,9 @@ namespace Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces
 {
     public interface IOperationGeneralFactory
     {
-        OperationResultBase<T> Forbidden<T>(string message = "Forbidden");
-        OperationResultBase<T> Accepted<T>(string message = "Request Accepted");
-        OperationResultBase<T> ServiceUnavailable<T>(string message = "Service Unavailable");
-        OperationResultBase<T> UnauthorizedAccess<T>(string message = "Unauthorized Access");
+        OperationResultSingle<T> Forbidden<T>(string message = "Forbidden");
+        OperationResultSingle<T> Accepted<T>(string message = "Request Accepted");
+        OperationResultSingle<T> ServiceUnavailable<T>(string message = "Service Unavailable");
+        OperationResultSingle<T> UnauthorizedAccess<T>(string message = "Unauthorized Access");
     }
 }

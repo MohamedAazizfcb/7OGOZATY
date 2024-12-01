@@ -46,5 +46,9 @@ namespace Presentation.Filters
                 }
             }
         }
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // Nothing
+        }
     }
 }

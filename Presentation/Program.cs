@@ -23,7 +23,9 @@ builder.Services.AddDomainServices()
                 .AddApplicationServices()
                 .AddInfrastructureServices();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddScoped<GlobalExceptionHandler>();
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -81,6 +83,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseRouting();
+
 app.UseStaticFiles();
 
 //seeding
@@ -108,7 +112,6 @@ app.UseDeveloperExceptionPage();
     app.UseSwaggerUI();
 //}
 
-
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAllOrigins");
@@ -118,8 +121,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<GlobalExceptionHandler>();
-
-
 
 app.MapControllers();
 

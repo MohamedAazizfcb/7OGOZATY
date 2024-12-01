@@ -3,17 +3,20 @@ using System.Text.Json;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Domain.Exceptions;
-using Application.Dtos.Common;
+using Domain.Results;
+using Domain.Interfaces.CommonInterfaces;
 
 namespace Presentation.Middlewares
 {
     public class GlobalExceptionHandler : IMiddleware
     {
         private readonly ILogger<GlobalExceptionHandler> _logger;
+        private readonly IApiResponseFactory _responseFactory;
 
-        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IApiResponseFactory responseFactory)
         {
             _logger = logger;
+            _responseFactory = responseFactory;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -37,7 +40,7 @@ namespace Presentation.Middlewares
             var response = context.Response;
             response.ContentType = "application/json";
 
-            var responseModel = new ApiResponse<string>
+            var responseModel = new OperationResultSingle<string>
             {
                 Succeeded = false,
                 Message = exception.Message,
@@ -61,7 +64,7 @@ namespace Presentation.Middlewares
             await response.WriteAsync(result);
         }
 
-        private int SetErrorDetails(HttpStatusCode statusCode, Exception exception, ApiResponse<string> responseModel, object? errors = null)
+        private int SetErrorDetails(HttpStatusCode statusCode, Exception exception, OperationResultSingle<string> responseModel, object? errors = null)
         {
             responseModel.StatusCode = statusCode;
             responseModel.Message = exception.Message;

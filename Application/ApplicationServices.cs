@@ -1,12 +1,11 @@
 ﻿using Application.Authorization;
-using Application.Contracts;
 using Application.Factories;
-using Application.Implementations;
+using Application.Services;
+using Domain.Interfaces;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Application
 {
@@ -14,7 +13,7 @@ namespace Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
@@ -22,15 +21,18 @@ namespace Application
 
 
 
-            services.AddScoped<IOperationResultFactory, OperationResultFactory>();
+            services.AddScoped<IOperationResultFactory, OperationSingleResultFactory>();
             services.AddScoped<IApiResponseFactory, ApiResponseFactory>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ILookupService, LookupService>();
-            services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IAppointmentService, AppointmentService>();
-            services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+            services.AddScoped(typeof(ILookupService<>), typeof(LookupService<>)); // Registering the generic service
+
+            //services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IAuthService, AuthService>();
+            //services.AddScoped<ILookupService, LookupService>();
+            //services.AddScoped<IDoctorService, DoctorService>();
+            //services.AddScoped<IAppointmentService, AppointmentService>();
+            //services.AddScoped<IJwtTokenService, JwtTokenService>();
             return services;
         }
     }

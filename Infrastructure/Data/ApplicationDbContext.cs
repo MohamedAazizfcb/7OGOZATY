@@ -1,4 +1,5 @@
-﻿using Domain.Entities.User;
+﻿using Domain.Entities.Lookups;
+using Domain.Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +9,27 @@ namespace Infrastructure.Data
     {
         public string _userId = string.Empty;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, string userId)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            _userId = userId;
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+            var lookupTypes = typeof(Lookup).Assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && typeof(Lookup).IsAssignableFrom(t));
+
+            foreach (var type in lookupTypes)
+            {
+                var configType = typeof(LookupConfiguration<>).MakeGenericType(type);
+                var configInstance = Activator.CreateInstance(configType);
+                modelBuilder.ApplyConfiguration((dynamic)configInstance);
+            }
+
+            base.OnModelCreating(modelBuilder);
+        }
+
 
         public override int SaveChanges()
         {
