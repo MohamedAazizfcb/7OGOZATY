@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.Lookup;
 
-namespace Domain.Entities.Lookups
+namespace Application.Dtos.Lookup.Response
 {
     public class CreateUpdateTimeSlotStatusResponse : CreateUpdateLookupResponse
     {

@@ -15,7 +15,7 @@ namespace Application.Dtos.Appointment
         public string DoctorName { get; set; }
         public string PatientId { get; set; }
         public string DoctorId { get; set; }
-        public ScheduleDetail Slot { get; set; }
+        //public ScheduleDetail Slot { get; set; }
         public AppointmentStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }

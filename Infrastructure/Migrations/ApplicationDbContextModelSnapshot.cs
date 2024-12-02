@@ -22,6 +22,226 @@ namespace Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AppointmentDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("AppointmentStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int?>("PatientID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeSlotId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentStatusId");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientID");
+
+                    b.ToTable("Appointment");
+                });
+
+            modelBuilder.Entity("Domain.Entities.BaseGallery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("varchar(13)");
+
+                    b.Property<string>("ImageDescription")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseGallery");
+
+                    b.HasDiscriminator().HasValue("BaseGallery");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ClinicEntity.Clinic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clinic");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DoctorCertificateEntity.DoctorCertificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CertificateFilePath")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("CertificateName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("IssuedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("IssuingAuthority")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("DoctorCertificate");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FeedbackEntity.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Feedback");
+                });
+
+            modelBuilder.Entity("Domain.Entities.InsuranceProviderEntities.UserInsuranceProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContactInfo")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInsuranceProvider");
+                });
+
             modelBuilder.Entity("Domain.Entities.Lookups.AccountStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -39,10 +259,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -67,10 +283,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.ToTable("AppointmentStatus");
@@ -93,10 +305,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -124,10 +332,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GovernorateID");
@@ -152,10 +356,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -183,15 +383,34 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CountryID");
 
                     b.ToTable("Governorate");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Lookups.Specialization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name_Ar")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Name_En")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialization");
                 });
 
             modelBuilder.Entity("Domain.Entities.Lookups.TimeSlotStatus", b =>
@@ -212,16 +431,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.ToTable("TimeSlotStatus");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Lookups.UserRole", b =>
+            modelBuilder.Entity("Domain.Entities.MedicalRecordEntities.MedicalRecord", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,47 +444,91 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name_Ar")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Name_En")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("MedicalRecord");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ScheduleDetail", b =>
+            modelBuilder.Entity("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ApplicationUserId")
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Diagnosis")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("MedicalRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Prescriptions")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Treatment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicalRecordId");
+
+                    b.ToTable("MedicalRecordEntry");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TimeSlotEntity.TimeSlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Slot")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("TimeSlotStatusId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
 
-                    b.ToTable("ScheduleDetail");
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("TimeSlotStatusId");
+
+                    b.ToTable("TimeSlot");
                 });
 
             modelBuilder.Entity("Domain.Entities.User.ApplicationRole", b =>
@@ -340,24 +599,32 @@ namespace Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AccountStatus")
+                    b.Property<int?>("AccountStatusId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int?>("ApplicationRoleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("varchar(21)");
+
+                    b.Property<int?>("DistrictId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
@@ -366,14 +633,22 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GovernorateId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -393,12 +668,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ProfilePicture")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SecurityStamp")
@@ -408,16 +685,23 @@ namespace Infrastructure.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
-                    b.Property<int>("gender")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountStatusId");
+
+                    b.HasIndex("ApplicationRoleId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("GovernorateId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -427,6 +711,10 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -532,6 +820,168 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.ClinicEntity.ClinicGallery", b =>
+                {
+                    b.HasBaseType("Domain.Entities.BaseGallery");
+
+                    b.Property<int>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasDiscriminator().HasValue("ClinicGallery");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Doctor", b =>
+                {
+                    b.HasBaseType("Domain.Entities.User.ApplicationUser");
+
+                    b.Property<string>("Brief")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int?>("CertificateId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ClinicId");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.HasDiscriminator().HasValue("Doctor");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Patient", b =>
+                {
+                    b.HasBaseType("Domain.Entities.User.ApplicationUser");
+
+                    b.Property<string>("BloodType")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
+
+                    b.Property<string>("EmergencyContactName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("InsurancePolicyNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("MedicalRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("UserInsuranceProviderId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("MedicalRecordId")
+                        .IsUnique();
+
+                    b.HasIndex("UserInsuranceProviderId");
+
+                    b.HasDiscriminator().HasValue("Patient");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Secretary", b =>
+                {
+                    b.HasBaseType("Domain.Entities.User.ApplicationUser");
+
+                    b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasDiscriminator().HasValue("Secretary");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
+                {
+                    b.HasOne("Domain.Entities.Lookups.AppointmentStatus", "AppointmentStatus")
+                        .WithMany("Appointments")
+                        .HasForeignKey("AppointmentStatusId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.ClinicEntity.Clinic", "Clinic")
+                        .WithMany("Appointments")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.User.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("AppointmentStatus");
+
+                    b.Navigation("Clinic");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DoctorCertificateEntity.DoctorCertificate", b =>
+                {
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany("DoctorCertificates")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FeedbackEntity.Feedback", b =>
+                {
+                    b.HasOne("Domain.Entities.AppointmentEntities.Appointment", "Appointment")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany("FeedbackRecievedByMe")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.User.Patient", "Patient")
+                        .WithMany("FeedbackRecievedByMe")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Domain.Entities.Lookups.District", b =>
                 {
                     b.HasOne("Domain.Entities.Lookups.Governorate", "Governorate")
@@ -554,11 +1004,80 @@ namespace Infrastructure.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ScheduleDetail", b =>
+            modelBuilder.Entity("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", b =>
                 {
-                    b.HasOne("Domain.Entities.User.ApplicationUser", null)
-                        .WithMany("Schedule")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecord", "MedicalRecord")
+                        .WithMany("Entries")
+                        .HasForeignKey("MedicalRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicalRecord");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TimeSlotEntity.TimeSlot", b =>
+                {
+                    b.HasOne("Domain.Entities.AppointmentEntities.Appointment", "Appointment")
+                        .WithOne("TimeSlot")
+                        .HasForeignKey("Domain.Entities.TimeSlotEntity.TimeSlot", "AppointmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany("TimeSlots")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Lookups.TimeSlotStatus", "TimeSlotStatus")
+                        .WithMany("TimeSlots")
+                        .HasForeignKey("TimeSlotStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("TimeSlotStatus");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.ApplicationUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Lookups.AccountStatus", "AccountStatus")
+                        .WithMany()
+                        .HasForeignKey("AccountStatusId");
+
+                    b.HasOne("Domain.Entities.User.ApplicationRole", "ApplicationRole")
+                        .WithMany()
+                        .HasForeignKey("ApplicationRoleId");
+
+                    b.HasOne("Domain.Entities.Lookups.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("Domain.Entities.Lookups.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId");
+
+                    b.HasOne("Domain.Entities.Lookups.Gender", "Gender")
+                        .WithMany()
+                        .HasForeignKey("GenderId");
+
+                    b.HasOne("Domain.Entities.Lookups.Governorate", "Governorate")
+                        .WithMany()
+                        .HasForeignKey("GovernorateId");
+
+                    b.Navigation("AccountStatus");
+
+                    b.Navigation("ApplicationRole");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("District");
+
+                    b.Navigation("Gender");
+
+                    b.Navigation("Governorate");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -612,6 +1131,89 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.ClinicEntity.ClinicGallery", b =>
+                {
+                    b.HasOne("Domain.Entities.ClinicEntity.Clinic", "Clinic")
+                        .WithMany("Gallery")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Doctor", b =>
+                {
+                    b.HasOne("Domain.Entities.ClinicEntity.Clinic", "Clinic")
+                        .WithMany("Doctors")
+                        .HasForeignKey("ClinicId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.Lookups.Specialization", "Specialization")
+                        .WithMany()
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Clinic");
+
+                    b.Navigation("Specialization");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Patient", b =>
+                {
+                    b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecord", "MedicalRecord")
+                        .WithOne("Patient")
+                        .HasForeignKey("Domain.Entities.User.Patient", "MedicalRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.InsuranceProviderEntities.UserInsuranceProvider", "InsuranceProvider")
+                        .WithMany("Patients")
+                        .HasForeignKey("UserInsuranceProviderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("InsuranceProvider");
+
+                    b.Navigation("MedicalRecord");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Secretary", b =>
+                {
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
+                {
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("TimeSlot");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ClinicEntity.Clinic", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
+
+                    b.Navigation("Gallery");
+                });
+
+            modelBuilder.Entity("Domain.Entities.InsuranceProviderEntities.UserInsuranceProvider", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Lookups.AppointmentStatus", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
             modelBuilder.Entity("Domain.Entities.Lookups.Country", b =>
                 {
                     b.Navigation("Governorates");
@@ -622,9 +1224,35 @@ namespace Infrastructure.Migrations
                     b.Navigation("Districts");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User.ApplicationUser", b =>
+            modelBuilder.Entity("Domain.Entities.Lookups.TimeSlotStatus", b =>
                 {
-                    b.Navigation("Schedule");
+                    b.Navigation("TimeSlots");
+                });
+
+            modelBuilder.Entity("Domain.Entities.MedicalRecordEntities.MedicalRecord", b =>
+                {
+                    b.Navigation("Entries");
+
+                    b.Navigation("Patient")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("DoctorCertificates");
+
+                    b.Navigation("FeedbackRecievedByMe");
+
+                    b.Navigation("TimeSlots");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("FeedbackRecievedByMe");
                 });
 #pragma warning restore 612, 618
         }

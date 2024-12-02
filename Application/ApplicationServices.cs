@@ -1,6 +1,6 @@
 ﻿using Application.Authorization;
 using Application.Factories;
-using Application.Services;
+//using Application.Services;
 using Domain.Interfaces;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
@@ -25,7 +25,7 @@ namespace Application
             services.AddScoped<IApiResponseFactory, ApiResponseFactory>();
 
 
-            services.AddScoped(typeof(ILookupService<>), typeof(LookupService<>)); // Registering the generic service
+            //services.AddScoped(typeof(ILookupService<>), typeof(LookupService<>)); // Registering the generic service
 
             //services.AddScoped<IUserService, UserService>();
             //services.AddScoped<IAuthService, AuthService>();

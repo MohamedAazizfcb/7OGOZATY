@@ -1,4 +1,6 @@
-﻿namespace Application.Dtos.Lookup.Request
+﻿using Domain.Entities.Lookups;
+
+namespace Application.Dtos.Lookup.Response
 {
     public class CreateUpdateDistrictResponse : CreateUpdateLookupResponse
     {

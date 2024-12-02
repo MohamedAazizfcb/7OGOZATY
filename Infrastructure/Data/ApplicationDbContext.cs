@@ -1,5 +1,14 @@
 ﻿using Domain.Entities.Lookups;
 using Domain.Entities.User;
+using Infrastructure.Data.Configurations.AppointmentConf;
+using Infrastructure.Data.Configurations.ClinicConf;
+using Infrastructure.Data.Configurations.DoctorCertificateConf;
+using Infrastructure.Data.Configurations.FeedbackConf;
+using Infrastructure.Data.Configurations.Gallery;
+using Infrastructure.Data.Configurations.InsuranceProviderConf;
+using Infrastructure.Data.Configurations.MedicalRecordConf;
+using Infrastructure.Data.Configurations.TimeSlotConf;
+using Infrastructure.Data.Configurations.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +25,6 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-
             var lookupTypes = typeof(Lookup).Assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && typeof(Lookup).IsAssignableFrom(t));
 
@@ -26,6 +34,26 @@ namespace Infrastructure.Data
                 var configInstance = Activator.CreateInstance(configType);
                 modelBuilder.ApplyConfiguration((dynamic)configInstance);
             }
+
+
+            modelBuilder.ApplyConfiguration(new GalleryConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicGalleryConfigurations());
+            modelBuilder.ApplyConfiguration(new DoctorCertificateConfiguration());
+            modelBuilder.ApplyConfiguration(new InsuranceProviderConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalRecordEntryConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalRecordConfiguration());
+            modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientConfiguration());
+            modelBuilder.ApplyConfiguration(new SecretaryConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSlotConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSlotConfiguration());
+            modelBuilder.ApplyConfiguration(new FeedbackConfiguration());
+
+
+
 
             base.OnModelCreating(modelBuilder);
         }
