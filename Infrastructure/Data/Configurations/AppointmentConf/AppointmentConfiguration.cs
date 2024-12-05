@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.AppointmentEntities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Domain.Entities.MedicalRecordEntities;
 
 namespace Infrastructure.Data.Configurations.AppointmentConf
 {
@@ -45,6 +46,18 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
                    .HasForeignKey(a => a.PatientID)
                    .OnDelete(DeleteBehavior.SetNull) // Set to null if Patient is deleted
                    .IsRequired(false); // Patient is optional
+
+            builder.HasMany(a => a.AppointmentServicesPivots)
+                   .WithOne(s => s.Appointment)
+                   .HasForeignKey(a => a.AppointmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
+
+            builder.HasOne(e => e.MedicalRecordEntry)
+                  .WithOne(a => a.Appointment)
+                  .HasForeignKey<Appointment>(mr => mr.Id)
+                  .OnDelete(DeleteBehavior.Cascade); // Deleting a medical record deletes its entries
+
 
             // Feedback for Appointment
             builder.HasMany(a => a.Feedbacks)  // An appointment can have multiple feedback entries

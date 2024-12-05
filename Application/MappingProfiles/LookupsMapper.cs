@@ -9,16 +9,16 @@ namespace Application.MappingProfiles
     {
         protected LookupsMapper()
         {
-            CreateMap<Lookup, CreateUpdateLookupResponse>();
-            CreateMap<Governorate, CreateUpdateGovernorateResponse>();
-            CreateMap<Country, CreateUpdateCountryResponse>();
-            CreateMap<District, CreateUpdateDistrictResponse>();
+            CreateMap<Lookup, LookupResponse>();
+            CreateMap<Governorate, GovernorateLookupResponse>();
+            CreateMap<Country, CountryLookupResponse>();
+            CreateMap<District, DistrictLookupResponse>();
 
 
-            CreateMap<CreateUpdateLookupRequest, Lookup>();
-            CreateMap<CreateUpdateGovernorateRequest, Governorate>();
+            CreateMap<LookupLookupRequest, Lookup>();
+            CreateMap<GovernorateLookupRequest, Governorate>();
             CreateMap<CreateUpdateCountryRequest, Country>();
-            CreateMap<CreateUpdateDistrictRequest, District>();
+            CreateMap<DistrictLookupRequest, District>();
         }
     }
 }

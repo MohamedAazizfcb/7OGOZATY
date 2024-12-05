@@ -17,6 +17,12 @@ namespace Infrastructure.Data.Configurations.MedicalRecordConf
                    .HasForeignKey(e => e.MedicalRecordId)
                    .OnDelete(DeleteBehavior.Cascade); // Deleting a medical record deletes its entries
 
+            builder.HasOne(e => e.Appointment)
+                  .WithOne(a => a.MedicalRecordEntry)
+                  .HasForeignKey<MedicalRecordEntry>(mr => mr.MedicalRecordId)
+                  .OnDelete(DeleteBehavior.Cascade); // Deleting a medical record deletes its entries
+
+
             // Properties
             builder.Property(e => e.EntryDate)
                    .IsRequired();

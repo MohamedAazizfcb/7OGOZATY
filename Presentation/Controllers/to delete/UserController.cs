@@ -7,10 +7,10 @@ namespace Presentation.Controllers
     public class UserController : ControllerBase
     {
 
-        [HttpPost("add")]
-        public IActionResult Add([FromBody] string request)
-        {
-            return Ok(request);
-        }
+        //[HttpPost("add")]
+        //public IActionResult Add([FromBody] string request)
+        //{
+        //    return Ok(request);
+        //}
     }
 }

@@ -25,10 +25,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime(6)");
@@ -40,6 +37,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicalRecordEntryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
@@ -63,6 +63,21 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PatientID");
 
                     b.ToTable("Appointment");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppointmentEntities.AppointmentServicesPivot", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentId", "ServiceId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("AppointmentServicesPivot");
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseGallery", b =>
@@ -460,6 +475,9 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Diagnosis")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -491,6 +509,58 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MedicalRecordId");
 
                     b.ToTable("MedicalRecordEntry");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpecializationServicesEntity.DoctorServicePivot", b =>
+                {
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecializationServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorAvgDurationForServiceInMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorPriceForService")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorId", "SpecializationServiceId");
+
+                    b.HasIndex("SpecializationServiceId");
+
+                    b.ToTable("DoctorServicePivot");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpecializationServicesEntity.SpecializationService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AvgDurationInMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceDescription")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("ServiceName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.ToTable("SpecializationService");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlotEntity.TimeSlot", b =>
@@ -932,6 +1002,12 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", "MedicalRecordEntry")
+                        .WithOne("Appointment")
+                        .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.User.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientID")
@@ -943,7 +1019,28 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Doctor");
 
+                    b.Navigation("MedicalRecordEntry");
+
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppointmentEntities.AppointmentServicesPivot", b =>
+                {
+                    b.HasOne("Domain.Entities.AppointmentEntities.Appointment", "Appointment")
+                        .WithMany("AppointmentServicesPivots")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.SpecializationServicesEntity.SpecializationService", "Service")
+                        .WithMany("AppointmentServicesPivots")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("Domain.Entities.DoctorCertificateEntity.DoctorCertificate", b =>
@@ -1013,6 +1110,36 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("MedicalRecord");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpecializationServicesEntity.DoctorServicePivot", b =>
+                {
+                    b.HasOne("Domain.Entities.User.Doctor", "Doctor")
+                        .WithMany("DoctorServicePivots")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.SpecializationServicesEntity.SpecializationService", "SpecializationService")
+                        .WithMany("DoctorSpecializationsPivots")
+                        .HasForeignKey("SpecializationServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("SpecializationService");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpecializationServicesEntity.SpecializationService", b =>
+                {
+                    b.HasOne("Domain.Entities.Lookups.Specialization", "Specialization")
+                        .WithMany()
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specialization");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlotEntity.TimeSlot", b =>
@@ -1190,6 +1317,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
                 {
+                    b.Navigation("AppointmentServicesPivots");
+
                     b.Navigation("Feedbacks");
 
                     b.Navigation("TimeSlot");
@@ -1237,11 +1366,26 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", b =>
+                {
+                    b.Navigation("Appointment")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.SpecializationServicesEntity.SpecializationService", b =>
+                {
+                    b.Navigation("AppointmentServicesPivots");
+
+                    b.Navigation("DoctorSpecializationsPivots");
+                });
+
             modelBuilder.Entity("Domain.Entities.User.Doctor", b =>
                 {
                     b.Navigation("Appointments");
 
                     b.Navigation("DoctorCertificates");
+
+                    b.Navigation("DoctorServicePivots");
 
                     b.Navigation("FeedbackRecievedByMe");
 

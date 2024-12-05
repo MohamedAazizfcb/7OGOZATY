@@ -51,6 +51,11 @@ namespace Infrastructure.Data.Configurations.Users
                    .WithOne(f => f.Doctor)  // Each feedback is related to one doctor
                    .HasForeignKey(f => f.DoctorId)  // DoctorId in Feedback entity
                    .OnDelete(DeleteBehavior.SetNull);  // In case doctor is deleted, don't delete the feedback
+
+            builder.HasMany(ss => ss.DoctorServicePivots) 
+                .WithOne() 
+                .HasForeignKey(ds => ds.DoctorId) 
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

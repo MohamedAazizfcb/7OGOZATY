@@ -3,6 +3,7 @@ using Domain.Entities.ClinicEntity;
 using Domain.Entities.DoctorCertificateEntity;
 using Domain.Entities.FeedbackEntity;
 using Domain.Entities.Lookups;
+using Domain.Entities.SpecializationServicesEntity;
 using Domain.Entities.TimeSlotEntity;
 
 namespace Domain.Entities.User
@@ -25,6 +26,8 @@ namespace Domain.Entities.User
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
         public virtual ICollection<Feedback> FeedbackRecievedByMe { get; set; } = new List<Feedback>();
+
+        public virtual ICollection<DoctorServicePivot> DoctorServicePivots { get; set; } = new List<DoctorServicePivot>();
 
     }
 }

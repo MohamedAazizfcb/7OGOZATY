@@ -1,6 +1,8 @@
 ﻿using Domain.Entities.ClinicEntity;
 using Domain.Entities.FeedbackEntity;
 using Domain.Entities.Lookups;
+using Domain.Entities.MedicalRecordEntities;
+using Domain.Entities.SpecializationServicesEntity;
 using Domain.Entities.TimeSlotEntity;
 using Domain.Entities.User;
 
@@ -30,7 +32,14 @@ namespace Domain.Entities.AppointmentEntities
         public int? PatientID { get; set; }
         public virtual Patient Patient { get; set; }
 
+        public virtual ICollection<AppointmentServicesPivot> AppointmentServicesPivots { get; set; } = new List<AppointmentServicesPivot>();
+
+        public int MedicalRecordEntryId { get; set; } // Foreign Key to Patient
+        public virtual MedicalRecordEntry MedicalRecordEntry { get; set; } = null!; // Navigation Property
+
         // Feedbacks given on this appointment
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
+
     }
 }

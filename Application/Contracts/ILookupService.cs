@@ -1,17 +1,14 @@
-﻿using Application.Dtos.Lookup.Response;
-using Azure.Core;
-using Azure;
-using Domain.Results;
-using Application.Dtos.Lookup.Request;
+﻿using Domain.Results;
+using Domain.Entities.Lookups;
 
 namespace Application.Contracts
 {
-    public interface ILookupService
+    public interface ILookupService<T> where T : Lookup
     {
-        Task<OperationResultSingle<CreateUpdateLookupResponse>> CreateAsync(CreateUpdateLookupRequest entity);
-        Task<OperationResultSingle<IEnumerable<CreateUpdateLookupResponse>>> GetAllAsync();
-        Task<OperationResultSingle<CreateUpdateLookupResponse>> GetByIdAsync(int id);
-        Task<OperationResultSingle<CreateUpdateLookupResponse>> UpdateAsync(int id, CreateUpdateLookupRequest entity);
-        Task<OperationResultSingle<CreateUpdateLookupResponse>> DeleteAsync(int id);
+        Task<OperationResultSingle<IEnumerable<T>>> GetAllAsync();
+        Task<OperationResultSingle<T>> GetByIdAsync(int id);
+        Task<OperationResultSingle<T>> AddAsync(T entity);
+        Task<OperationResultSingle<T>> UpdateAsync(int id, T newEntity);
+        Task<OperationResultSingle<T>> DeleteAsync(int id);
     }
 }

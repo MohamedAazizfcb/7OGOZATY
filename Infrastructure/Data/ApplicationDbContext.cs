@@ -7,6 +7,7 @@ using Infrastructure.Data.Configurations.FeedbackConf;
 using Infrastructure.Data.Configurations.Gallery;
 using Infrastructure.Data.Configurations.InsuranceProviderConf;
 using Infrastructure.Data.Configurations.MedicalRecordConf;
+using Infrastructure.Data.Configurations.SpeicalizationServicesConf;
 using Infrastructure.Data.Configurations.TimeSlotConf;
 using Infrastructure.Data.Configurations.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -51,7 +52,9 @@ namespace Infrastructure.Data
             modelBuilder.ApplyConfiguration(new TimeSlotConfiguration());
             modelBuilder.ApplyConfiguration(new TimeSlotConfiguration());
             modelBuilder.ApplyConfiguration(new FeedbackConfiguration());
-
+            modelBuilder.ApplyConfiguration(new SpecializationServicesConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorServicesPivotConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentServicesPivotConfiguration());
 
 
 

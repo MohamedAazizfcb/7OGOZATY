@@ -1,4 +1,7 @@
-﻿namespace Domain.Entities.MedicalRecordEntities
+﻿using Domain.Entities.AppointmentEntities;
+using Domain.Entities.User;
+
+namespace Domain.Entities.MedicalRecordEntities
 {
     public class MedicalRecordEntry
     {
@@ -12,5 +15,9 @@
         public string Treatment { get; set; } = string.Empty; // Treatment details
         public string Notes { get; set; } = string.Empty; // Additional notes
         public string Prescriptions { get; set; } = string.Empty; // Prescribed medicines
+
+        public int AppointmentId { get; set; } // Foreign Key to Patient
+        public virtual Appointment Appointment { get; set; } = null!; // Navigation Property
+
     }
 }
