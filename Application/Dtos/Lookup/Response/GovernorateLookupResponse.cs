@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Lookup.Response
 {
-    public class CreateUpdateGovernorateResponse : CreateUpdateLookupResponse
+    public class GovernorateLookupResponse : LookupResponse
     {
         public int CountryID { get; set; }
         public Country Country { get; set; } = null!;

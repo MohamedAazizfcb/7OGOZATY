@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.Lookup.Request
 {
-    public class CreateUpdateGovernorateRequest : CreateUpdateLookupRequest
+    public class GovernorateLookupRequest : LookupRequest
     {
         public int CountryID { get; set; }
     }

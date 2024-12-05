@@ -9,9 +9,9 @@ namespace Presentation.Controllers.Lookups
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenderController : LookupController<Gender, GenderLookupRequest, GenderLookupResponse>
+    public class GovernorateController : LookupController<Governorate, GovernorateLookupRequest, GovernorateLookupResponse>
     {
-        public GenderController(ILookupService<Gender, GenderLookupRequest, GenderLookupResponse> lookupService, IApiResponseFactory responseFactory) : base(lookupService, responseFactory)
+        public GovernorateController(ILookupService<Governorate, GovernorateLookupRequest, GovernorateLookupResponse> lookupService, IApiResponseFactory responseFactory) : base(lookupService, responseFactory)
         {
         }
     }

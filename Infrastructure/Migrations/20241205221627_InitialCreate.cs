@@ -16,40 +16,6 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AccountStatus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccountStatus", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "AppointmentStatus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppointmentStatus", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -104,7 +70,7 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Country",
+                name: "Lookup",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -112,28 +78,27 @@ namespace Infrastructure.Migrations
                     Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Country", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Gender",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Discriminator = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GovernorateID = table.Column<int>(type: "int", nullable: true),
+                    CountryID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gender", x => x.Id);
+                    table.PrimaryKey("PK_Lookup", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lookup_Lookup_CountryID",
+                        column: x => x.CountryID,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Lookup_Lookup_GovernorateID",
+                        column: x => x.GovernorateID,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -148,40 +113,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicalRecord", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Specialization",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Specialization", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "TimeSlotStatus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TimeSlotStatus", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -256,24 +187,25 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Governorate",
+                name: "SpecializationService",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CountryID = table.Column<int>(type: "int", nullable: false),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    ServiceName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ServiceDescription = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AvgDurationInMinutes = table.Column<int>(type: "int", nullable: false),
+                    SpecializationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Governorate", x => x.Id);
+                    table.PrimaryKey("PK_SpecializationService", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Governorate_Country_CountryID",
-                        column: x => x.CountryID,
-                        principalTable: "Country",
+                        name: "FK_SpecializationService_Lookup_SpecializationId",
+                        column: x => x.SpecializationId,
+                        principalTable: "Lookup",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -304,55 +236,6 @@ namespace Infrastructure.Migrations
                         name: "FK_MedicalRecordEntry_MedicalRecord_MedicalRecordId",
                         column: x => x.MedicalRecordId,
                         principalTable: "MedicalRecord",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "SpecializationService",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ServiceName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ServiceDescription = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AvgDurationInMinutes = table.Column<int>(type: "int", nullable: false),
-                    SpecializationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SpecializationService", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SpecializationService_Specialization_SpecializationId",
-                        column: x => x.SpecializationId,
-                        principalTable: "Specialization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "District",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GovernorateID = table.Column<int>(type: "int", nullable: false),
-                    Name_Ar = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name_En = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_District", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_District_Governorate_GovernorateID",
-                        column: x => x.GovernorateID,
-                        principalTable: "Governorate",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -426,11 +309,6 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_AccountStatus_AccountStatusId",
-                        column: x => x.AccountStatusId,
-                        principalTable: "AccountStatus",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetRoles_ApplicationRoleId",
                         column: x => x.ApplicationRoleId,
                         principalTable: "AspNetRoles",
@@ -448,25 +326,36 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Country_CountryId",
+                        name: "FK_AspNetUsers_Lookup_AccountStatusId",
+                        column: x => x.AccountStatusId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Lookup_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "Country",
+                        principalTable: "Lookup",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_District_DistrictId",
+                        name: "FK_AspNetUsers_Lookup_DistrictId",
                         column: x => x.DistrictId,
-                        principalTable: "District",
+                        principalTable: "Lookup",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Gender_GenderId",
+                        name: "FK_AspNetUsers_Lookup_GenderId",
                         column: x => x.GenderId,
-                        principalTable: "Gender",
+                        principalTable: "Lookup",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Governorate_GovernorateId",
+                        name: "FK_AspNetUsers_Lookup_GovernorateId",
                         column: x => x.GovernorateId,
-                        principalTable: "Governorate",
+                        principalTable: "Lookup",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Lookup_SpecializationId",
+                        column: x => x.SpecializationId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_MedicalRecord_MedicalRecordId",
                         column: x => x.MedicalRecordId,
@@ -474,68 +363,11 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Specialization_SpecializationId",
-                        column: x => x.SpecializationId,
-                        principalTable: "Specialization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_AspNetUsers_UserInsuranceProvider_UserInsuranceProviderId",
                         column: x => x.UserInsuranceProviderId,
                         principalTable: "UserInsuranceProvider",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Appointment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    AppointmentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: true),
-                    AppointmentStatusId = table.Column<int>(type: "int", nullable: true),
-                    ClinicId = table.Column<int>(type: "int", nullable: true),
-                    DoctorId = table.Column<int>(type: "int", nullable: true),
-                    PatientID = table.Column<int>(type: "int", nullable: true),
-                    MedicalRecordEntryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Appointment_AppointmentStatus_AppointmentStatusId",
-                        column: x => x.AppointmentStatusId,
-                        principalTable: "AppointmentStatus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Appointment_AspNetUsers_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Appointment_AspNetUsers_PatientID",
-                        column: x => x.PatientID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Appointment_Clinic_ClinicId",
-                        column: x => x.ClinicId,
-                        principalTable: "Clinic",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Appointment_MedicalRecordEntry_Id",
-                        column: x => x.Id,
-                        principalTable: "MedicalRecordEntry",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -692,6 +524,94 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "TimeSlot",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    TimeSlotStatusId = table.Column<int>(type: "int", nullable: false),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSlot", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TimeSlot_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TimeSlot_Lookup_TimeSlotStatusId",
+                        column: x => x.TimeSlotStatusId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TimeSlotId = table.Column<int>(type: "int", nullable: true),
+                    AppointmentStatusId = table.Column<int>(type: "int", nullable: true),
+                    ClinicId = table.Column<int>(type: "int", nullable: true),
+                    DoctorId = table.Column<int>(type: "int", nullable: true),
+                    PatientID = table.Column<int>(type: "int", nullable: true),
+                    MedicalRecordEntryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Appointment_AspNetUsers_PatientID",
+                        column: x => x.PatientID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Clinic_ClinicId",
+                        column: x => x.ClinicId,
+                        principalTable: "Clinic",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Lookup_AppointmentStatusId",
+                        column: x => x.AppointmentStatusId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Appointment_MedicalRecordEntry_Id",
+                        column: x => x.Id,
+                        principalTable: "MedicalRecordEntry",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointment_TimeSlot_TimeSlotId",
+                        column: x => x.TimeSlotId,
+                        principalTable: "TimeSlot",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AppointmentServicesPivot",
                 columns: table => new
                 {
@@ -725,7 +645,7 @@ namespace Infrastructure.Migrations
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true),
                     DoctorId = table.Column<int>(type: "int", nullable: true),
                     PatientId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -737,7 +657,7 @@ namespace Infrastructure.Migrations
                         column: x => x.AppointmentId,
                         principalTable: "Appointment",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Feedback_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
@@ -750,43 +670,6 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "TimeSlot",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    TimeSlotStatusId = table.Column<int>(type: "int", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TimeSlot", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TimeSlot_Appointment_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "Appointment",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_TimeSlot_AspNetUsers_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TimeSlot_TimeSlotStatus_TimeSlotStatusId",
-                        column: x => x.TimeSlotStatusId,
-                        principalTable: "TimeSlotStatus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -809,6 +692,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Appointment_PatientID",
                 table: "Appointment",
                 column: "PatientID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_TimeSlotId",
+                table: "Appointment",
+                column: "TimeSlotId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentServicesPivot_ServiceId",
@@ -914,11 +803,6 @@ namespace Infrastructure.Migrations
                 column: "ClinicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_District_GovernorateID",
-                table: "District",
-                column: "GovernorateID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DoctorCertificate_DoctorId",
                 table: "DoctorCertificate",
                 column: "DoctorId");
@@ -944,9 +828,14 @@ namespace Infrastructure.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Governorate_CountryID",
-                table: "Governorate",
+                name: "IX_Lookup_CountryID",
+                table: "Lookup",
                 column: "CountryID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lookup_GovernorateID",
+                table: "Lookup",
+                column: "GovernorateID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecordEntry_MedicalRecordId",
@@ -957,12 +846,6 @@ namespace Infrastructure.Migrations
                 name: "IX_SpecializationService_SpecializationId",
                 table: "SpecializationService",
                 column: "SpecializationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TimeSlot_AppointmentId",
-                table: "TimeSlot",
-                column: "AppointmentId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeSlot_DoctorId",
@@ -1009,28 +892,19 @@ namespace Infrastructure.Migrations
                 name: "Feedback");
 
             migrationBuilder.DropTable(
-                name: "TimeSlot");
-
-            migrationBuilder.DropTable(
                 name: "SpecializationService");
 
             migrationBuilder.DropTable(
                 name: "Appointment");
 
             migrationBuilder.DropTable(
-                name: "TimeSlotStatus");
-
-            migrationBuilder.DropTable(
-                name: "AppointmentStatus");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "MedicalRecordEntry");
 
             migrationBuilder.DropTable(
-                name: "AccountStatus");
+                name: "TimeSlot");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1039,25 +913,13 @@ namespace Infrastructure.Migrations
                 name: "Clinic");
 
             migrationBuilder.DropTable(
-                name: "District");
-
-            migrationBuilder.DropTable(
-                name: "Gender");
-
-            migrationBuilder.DropTable(
-                name: "Specialization");
-
-            migrationBuilder.DropTable(
-                name: "UserInsuranceProvider");
+                name: "Lookup");
 
             migrationBuilder.DropTable(
                 name: "MedicalRecord");
 
             migrationBuilder.DropTable(
-                name: "Governorate");
-
-            migrationBuilder.DropTable(
-                name: "Country");
+                name: "UserInsuranceProvider");
         }
     }
 }

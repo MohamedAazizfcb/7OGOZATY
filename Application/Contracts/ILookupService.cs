@@ -1,14 +1,16 @@
 ﻿using Domain.Results;
-using Domain.Entities.Lookups;
 
 namespace Application.Contracts
 {
-    public interface ILookupService<T> where T : Lookup
+    public interface ILookupService<T, T_Req, T_Res>
+        where T : class
+        where T_Req : class
+        where T_Res : class
     {
-        Task<OperationResultSingle<IEnumerable<T>>> GetAllAsync();
-        Task<OperationResultSingle<T>> GetByIdAsync(int id);
-        Task<OperationResultSingle<T>> AddAsync(T entity);
-        Task<OperationResultSingle<T>> UpdateAsync(int id, T newEntity);
-        Task<OperationResultSingle<T>> DeleteAsync(int id);
+        Task<OperationResultSingle<IEnumerable<T_Res>>> GetAllAsync();
+        Task<OperationResultSingle<T_Res>> GetByIdAsync(int id);
+        Task<OperationResultSingle<string>> AddAsync(T_Req entity);
+        Task<OperationResultSingle<T_Res>> UpdateAsync(int id, T_Req newEntity);
+        Task<OperationResultSingle<T_Res>> DeleteAsync(int id);
     }
 }

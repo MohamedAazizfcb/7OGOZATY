@@ -17,15 +17,15 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
 
             // Foreign Key configuration for SpecializationService
             builder.HasOne(dsp => dsp.Service)
-                .WithMany(ss => ss.AppointmentServicesPivots)  // Assuming SpecializationService has a navigation property for DoctorServicePivots
+                .WithMany(ss => ss.AppointmentServicesPivots)  
                 .HasForeignKey(dsp => dsp.ServiceId)
-                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete, if you delete a SpecializationService, delete associated DoctorServicePivots
+                .OnDelete(DeleteBehavior.Cascade); 
 
             // Foreign Key configuration for Doctor
             builder.HasOne(dsp => dsp.Appointment)
-                .WithMany(d => d.AppointmentServicesPivots)  // Assuming Doctor has a navigation property for DoctorServicePivots
+                .WithMany(d => d.AppointmentServicesPivots) 
                 .HasForeignKey(dsp => dsp.AppointmentId)
-                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete, if you delete a Doctor, delete associated DoctorServicePivots
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

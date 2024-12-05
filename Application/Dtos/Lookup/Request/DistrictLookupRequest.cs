@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.Lookup.Request
 {
-    public class CreateUpdateDistrictRequest : CreateUpdateLookupRequest
+    public class DistrictLookupRequest : LookupRequest
     {
         public int GovernorateID { get; set; }
     }

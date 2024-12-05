@@ -6,6 +6,7 @@ using Infrastructure.Data.Configurations.DoctorCertificateConf;
 using Infrastructure.Data.Configurations.FeedbackConf;
 using Infrastructure.Data.Configurations.Gallery;
 using Infrastructure.Data.Configurations.InsuranceProviderConf;
+using Infrastructure.Data.Configurations.LookupConf;
 using Infrastructure.Data.Configurations.MedicalRecordConf;
 using Infrastructure.Data.Configurations.SpeicalizationServicesConf;
 using Infrastructure.Data.Configurations.TimeSlotConf;
@@ -26,16 +27,6 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-            var lookupTypes = typeof(Lookup).Assembly.GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && typeof(Lookup).IsAssignableFrom(t));
-
-            foreach (var type in lookupTypes)
-            {
-                var configType = typeof(LookupConfiguration<>).MakeGenericType(type);
-                var configInstance = Activator.CreateInstance(configType);
-                modelBuilder.ApplyConfiguration((dynamic)configInstance);
-            }
-
 
             modelBuilder.ApplyConfiguration(new GalleryConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicConfiguration());
@@ -54,7 +45,19 @@ namespace Infrastructure.Data
             modelBuilder.ApplyConfiguration(new FeedbackConfiguration());
             modelBuilder.ApplyConfiguration(new SpecializationServicesConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorServicesPivotConfiguration());
-            modelBuilder.ApplyConfiguration(new AppointmentServicesPivotConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentServicesPivotConfiguration()); 
+            modelBuilder.ApplyConfiguration(new AccountStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryConfiguration());
+            modelBuilder.ApplyConfiguration(new DistrictConfiguration());
+            modelBuilder.ApplyConfiguration(new GenderConfiguration());
+            modelBuilder.ApplyConfiguration(new GovernorateConfiguration());
+            modelBuilder.ApplyConfiguration(new LookupConfiguration());
+            modelBuilder.ApplyConfiguration(new SpecializationConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSlotStatusConfiguration());
+
+
+
 
 
 

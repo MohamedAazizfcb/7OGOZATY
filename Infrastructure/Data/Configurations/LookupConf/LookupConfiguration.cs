@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class LookupConfiguration<TLookup> : IEntityTypeConfiguration<TLookup> where TLookup : Lookup
+public class LookupConfiguration : IEntityTypeConfiguration<Lookup>
 {
-    public void Configure(EntityTypeBuilder<TLookup> builder)
+    public void Configure(EntityTypeBuilder<Lookup> builder)
     {
         builder.HasKey(l => l.Id);
 

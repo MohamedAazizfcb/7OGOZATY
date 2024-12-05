@@ -50,7 +50,7 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
             builder.HasMany(a => a.AppointmentServicesPivots)
                    .WithOne(s => s.Appointment)
                    .HasForeignKey(a => a.AppointmentId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .OnDelete(DeleteBehavior.Cascade);
 
 
             builder.HasOne(e => e.MedicalRecordEntry)
@@ -63,7 +63,7 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
             builder.HasMany(a => a.Feedbacks)  // An appointment can have multiple feedback entries
                    .WithOne(f => f.Appointment)  // Each feedback is related to one appointment
                    .HasForeignKey(f => f.AppointmentId)  // Foreign Key in Feedback
-                   .OnDelete(DeleteBehavior.SetNull);  // If an appointment is deleted, feedback should not be deleted
+                   .OnDelete(DeleteBehavior.Cascade);  // If an appointment is deleted, feedback should not be deleted
         }
     }
 }

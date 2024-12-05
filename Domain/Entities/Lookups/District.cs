@@ -3,6 +3,6 @@
     public class District : Lookup
     {
         public int GovernorateID { get; set; }
-        public Governorate Governorate { get; set; } = null!;
+        public Governorate Governorate { get; set; }
     }
 }

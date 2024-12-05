@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Lookup.Response
 {
-    public class CreateUpdateCountryResponse : CreateUpdateLookupResponse
+    public class CountryLookupResponse : LookupResponse
     {
         public ICollection<Governorate> Governorates { get; set; } = new List<Governorate>();
     }

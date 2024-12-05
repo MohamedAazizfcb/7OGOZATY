@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.Lookup.Response
 {
-    public class CreateUpdateLookupResponse
+    public abstract class LookupResponse
     {
         public int Id { get; set; }
         public string Name_Ar { get; set; }

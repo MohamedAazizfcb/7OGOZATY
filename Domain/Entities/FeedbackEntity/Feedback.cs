@@ -10,7 +10,7 @@ namespace Domain.Entities.FeedbackEntity
         public string Comment { get; set; } = string.Empty; // Feedback comment
 
         // Foreign Keys
-        public int AppointmentId { get; set; } // Foreign Key to Appointment
+        public int? AppointmentId { get; set; } // Foreign Key to Appointment
         public virtual Appointment Appointment { get; set; }
 
         public int? DoctorId { get; set; } // Doctor Recieving feedback

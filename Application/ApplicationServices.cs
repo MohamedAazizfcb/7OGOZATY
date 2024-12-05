@@ -1,14 +1,15 @@
 ﻿using Application.Authorization;
 using Application.Contracts;
+using Application.Dtos.Lookup.Request;
+using Application.Dtos.Lookup.Response;
 using Application.Factories;
-using Application.Services;
-
-//using Application.Services;
-using Domain.Interfaces;
+using Application.Services.Lookups;
+using Domain.Entities.Lookups;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Application
 {
@@ -16,7 +17,8 @@ namespace Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
@@ -28,7 +30,8 @@ namespace Application
             services.AddScoped<IApiResponseFactory, ApiResponseFactory>();
 
 
-            services.AddScoped(typeof(ILookupService<>), typeof(LookupService<>)); // Registering the generic service
+            services.AddScoped(typeof(ILookupService<,,>), typeof(LookupService<,,>));
+
 
             //services.AddScoped<IUserService, UserService>();
             //services.AddScoped<IAuthService, AuthService>();
