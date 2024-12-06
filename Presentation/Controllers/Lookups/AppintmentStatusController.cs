@@ -1,4 +1,4 @@
-﻿using Application.Contracts;
+﻿using Application.Contracts.Lookups;
 using Application.Dtos.Lookup.Request;
 using Application.Dtos.Lookup.Response;
 using Domain.Entities.Lookups;

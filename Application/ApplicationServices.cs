@@ -1,5 +1,5 @@
 ﻿using Application.Authorization;
-using Application.Contracts;
+using Application.Contracts.Lookups;
 using Application.Dtos.Lookup.Request;
 using Application.Dtos.Lookup.Response;
 using Application.Factories;
@@ -31,6 +31,9 @@ namespace Application
 
 
             services.AddScoped(typeof(ILookupService<,,>), typeof(LookupService<,,>));
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IDistrictService, DistrictService>();
+            services.AddScoped<IGovernorateService, GovernorateService>();
 
 
             //services.AddScoped<IUserService, UserService>();

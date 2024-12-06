@@ -4,6 +4,6 @@ namespace Application.Dtos.Lookup.Response
 {
     public class CountryLookupResponse : LookupResponse
     {
-        public ICollection<Governorate> Governorates { get; set; } = new List<Governorate>();
+        //public ICollection<Governorate> Governorates { get; set; } = new List<Governorate>();
     }
 }

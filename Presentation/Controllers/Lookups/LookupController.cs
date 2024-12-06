@@ -1,4 +1,4 @@
-﻿using Application.Contracts;
+﻿using Application.Contracts.Lookups;
 using Domain.Interfaces.CommonInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,8 +11,8 @@ namespace Presentation.Controllers.Lookups
         where T_Req : class
         where T_Res : class
     {
-        private readonly ILookupService<T, T_Req, T_Res> _lookupService;
-        private readonly IApiResponseFactory _responseFactory;
+        protected readonly ILookupService<T, T_Req, T_Res> _lookupService;
+        protected readonly IApiResponseFactory _responseFactory;
 
         public LookupController(ILookupService<T, T_Req, T_Res> lookupService, IApiResponseFactory responseFactory)
         {

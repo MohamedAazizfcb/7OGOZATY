@@ -1,6 +1,7 @@
-﻿using Application.Contracts;
+﻿using Application.Contracts.Lookups;
 using AutoMapper;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
+using Domain.Interfaces.GenericrRepositoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Results;
 
@@ -22,9 +23,14 @@ namespace Application.Services.Lookups
             _mapper = mapper;
         }
 
+        protected virtual IGenericRepository<T> GetRepository()
+        {
+            return _unitOfWork.GetRepository<T>();
+        }
+
         public virtual async Task<OperationResultSingle<IEnumerable<T_Res>>> GetAllAsync()
         {
-            var repository = _unitOfWork.GetRepository<T>();
+            var repository = GetRepository();
             var result = await repository.GetAllAsync();
 
             var mappedResult = _mapper.Map<IEnumerable<T_Res>>(result);
@@ -33,7 +39,7 @@ namespace Application.Services.Lookups
 
         public virtual async Task<OperationResultSingle<T_Res>> GetByIdAsync(int id)
         {
-            var repository = _unitOfWork.GetRepository<T>();
+            var repository = GetRepository();
             var result = await repository.GetByIdAsync(id);
             if (result == null)
             {
@@ -45,7 +51,7 @@ namespace Application.Services.Lookups
 
         public async Task<OperationResultSingle<string>> AddAsync(T_Req entity)
         {
-            var repository = _unitOfWork.GetRepository<T>();
+            var repository = GetRepository();
             await repository.AddAsync(_mapper.Map<T>(entity));
             await _unitOfWork.SaveAsync();
             return _operationResultFactory.Success("Created!")!;
@@ -53,7 +59,7 @@ namespace Application.Services.Lookups
 
         public async Task<OperationResultSingle<T_Res>> UpdateAsync(int id, T_Req newEntity)
         {
-            var repository = _unitOfWork.GetRepository<T>();
+            var repository = GetRepository();
             var oldEntity = await repository.GetByIdAsync(id);
             if (oldEntity != null)
             {
@@ -71,7 +77,7 @@ namespace Application.Services.Lookups
 
         public async Task<OperationResultSingle<T_Res>> DeleteAsync(int id)
         {
-            var repository = _unitOfWork.GetRepository<T>();
+            var repository = GetRepository();
             var entity = await repository.GetByIdAsync(id);
             if (entity != null)
             {

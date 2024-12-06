@@ -1,6 +1,6 @@
 ﻿using Domain.Results;
 
-namespace Application.Contracts
+namespace Application.Contracts.Lookups
 {
     public interface ILookupService<T, T_Req, T_Res>
         where T : class
