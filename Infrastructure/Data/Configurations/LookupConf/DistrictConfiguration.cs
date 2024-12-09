@@ -8,6 +8,7 @@ public class DistrictConfiguration : IEntityTypeConfiguration<District>
     {
         builder.HasBaseType<Lookup>();
 
+
         builder.HasOne(d => d.Governorate)
             .WithMany(g => g.Districts)
             .HasForeignKey(d => d.GovernorateID)

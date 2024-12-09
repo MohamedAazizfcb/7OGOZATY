@@ -30,12 +30,12 @@ namespace Infrastructure.Data.Configurations.FeedbackConf
             builder.HasOne(f => f.Doctor)
                    .WithMany(d => d.FeedbackRecievedByMe) // Doctor can Recieve multiple feedbacks
                    .HasForeignKey(f => f.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull); // If Doctor is deleted, set the feedback's doctor to null
+                   .OnDelete(DeleteBehavior.Cascade); // If Doctor is deleted, set the feedback's doctor to null
 
             builder.HasOne(f => f.Patient)
                    .WithMany(p => p.FeedbackRecievedByMe) // Patient can Recieve multiple feedbacks
                    .HasForeignKey(f => f.PatientId)
-                   .OnDelete(DeleteBehavior.SetNull); // If Patient is deleted, set the feedback's patient to null
+                   .OnDelete(DeleteBehavior.Cascade); // If Patient is deleted, set the feedback's patient to null
         }
     }
 

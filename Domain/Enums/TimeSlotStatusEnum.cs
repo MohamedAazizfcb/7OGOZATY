@@ -1,8 +1,8 @@
 ﻿namespace Domain.Enums
 {
-    public enum SlotStatus
+    public enum TimeSlotStatusEnum
     {
-        Free,
+        Free=20,
         Occupied,
         Cancelled
     }

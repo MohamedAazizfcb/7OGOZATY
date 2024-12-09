@@ -11,11 +11,11 @@ public class GovernorateConfiguration : IEntityTypeConfiguration<Governorate>
         builder.HasMany(g => g.Districts)
             .WithOne(d => d.Governorate)
             .HasForeignKey(d => d.GovernorateID)
-            .OnDelete(DeleteBehavior.SetNull); // Or Cascade if required
+            .OnDelete(DeleteBehavior.Cascade); // Or Cascade if required
 
         builder.HasOne(g => g.Country)
             .WithMany(c => c.Governorates)
             .HasForeignKey(g => g.CountryID)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

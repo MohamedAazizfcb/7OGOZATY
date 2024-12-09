@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Seeds
                 if (newUser is null)
                 {
                     await userManager.CreateAsync(user, "7ogozati@2025");
-                    await userManager.AddToRoleAsync(user, UserRoles.Admin.ToString());
+                    await userManager.AddToRoleAsync(user, UserRolesEnum.Admin.ToString());
                 }
             }
         }

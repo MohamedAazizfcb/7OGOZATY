@@ -1,10 +1,11 @@
 ﻿using Application.Authorization;
+using Application.Contracts;
+using Application.Contracts.Authentication;
 using Application.Contracts.Lookups;
-using Application.Dtos.Lookup.Request;
-using Application.Dtos.Lookup.Response;
 using Application.Factories;
+using Application.Services;
+using Application.Services.Authentication;
 using Application.Services.Lookups;
-using Domain.Entities.Lookups;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -35,13 +36,16 @@ namespace Application
             services.AddScoped<IDistrictService, DistrictService>();
             services.AddScoped<IGovernorateService, GovernorateService>();
 
+            services.AddScoped<IAuthenticationService, AuthentictionService>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+            services.AddScoped<IClinicService, ClinicService>();
+
 
             //services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IAuthService, AuthService>();
             //services.AddScoped<ILookupService, LookupService>();
             //services.AddScoped<IDoctorService, DoctorService>();
             //services.AddScoped<IAppointmentService, AppointmentService>();
-            //services.AddScoped<IJwtTokenService, JwtTokenService>();
             return services;
         }
     }

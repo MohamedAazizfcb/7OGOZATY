@@ -4,7 +4,7 @@ namespace Domain.Entities.Lookups
 {
     public class TimeSlotStatus : Lookup
     {
-        public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+        public virtual IEnumerable<TimeSlot>? TimeSlots { get; set; }
 
     }
 }

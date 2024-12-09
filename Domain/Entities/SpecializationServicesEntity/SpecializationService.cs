@@ -15,8 +15,8 @@ namespace Domain.Entities.SpecializationServicesEntity
         public int SpecializationId { get; set; }
         public virtual Specialization Specialization { get; set; } = null!;
 
-        public virtual ICollection<DoctorServicePivot> DoctorSpecializationsPivots { get; set; } = new List<DoctorServicePivot>();
-        public virtual ICollection<AppointmentServicesPivot> AppointmentServicesPivots { get; set; } = new List<AppointmentServicesPivot>();
+        public virtual ICollection<DoctorServicePivot>? DoctorSpecializationsPivots { get; set; } = new List<DoctorServicePivot>();
+        public virtual ICollection<AppointmentServicesPivot>? AppointmentServicesPivots { get; set; } = new List<AppointmentServicesPivot>();
 
     }
 }

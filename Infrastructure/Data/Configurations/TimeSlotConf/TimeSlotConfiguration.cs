@@ -29,8 +29,7 @@ namespace Infrastructure.Data.Configurations.TimeSlotConf
             builder.HasOne(ts => ts.Appointment)
                    .WithOne(a => a.TimeSlot)
                    .HasForeignKey<TimeSlot>(ts => ts.AppointmentId)
-                   .OnDelete(DeleteBehavior.SetNull) // Allow the TimeSlot to remain unassigned
-                   .IsRequired(false); // Make the relationship optional
+                   .OnDelete(DeleteBehavior.SetNull); // Allow the TimeSlot to remain unassigned
         }
     }
 }

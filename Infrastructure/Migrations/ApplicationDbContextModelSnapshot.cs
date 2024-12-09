@@ -27,16 +27,13 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("AppointmentStatusId")
+                    b.Property<int>("AppointmentStatusId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DoctorId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<int>("MedicalRecordEntryId")
@@ -46,10 +43,10 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
-                    b.Property<int?>("PatientID")
+                    b.Property<int>("PatientID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TimeSlotId")
+                    b.Property<int>("TimeSlotId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -97,7 +94,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(13)");
 
                     b.Property<string>("ImageDescription")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
@@ -105,9 +101,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -126,18 +119,19 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("GovernorateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -149,10 +143,13 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("GovernorateId");
 
                     b.ToTable("Clinic");
                 });
@@ -178,11 +175,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly?>("ExpiryDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("IssuedDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("IssuedDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("IssuingAuthority")
                         .IsRequired()
@@ -204,7 +201,7 @@ namespace Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppointmentId")
+                    b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -212,10 +209,10 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
-                    b.Property<int?>("DoctorId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("Rating")
@@ -415,8 +412,8 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
@@ -507,17 +504,17 @@ namespace Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AccountStatusId")
+                    b.Property<int>("AccountStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ApplicationRoleId")
+                    b.Property<int>("ApplicationRoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
@@ -528,7 +525,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("varchar(21)");
 
-                    b.Property<int?>("DistrictId")
+                    b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -544,10 +541,10 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int?>("GenderId")
+                    b.Property<int>("GenderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GovernorateId")
+                    b.Property<int>("GovernorateId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastLogin")
@@ -576,6 +573,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
@@ -815,9 +813,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
-                    b.Property<int?>("CertificateId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
@@ -851,7 +846,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(15)");
 
                     b.Property<string>("InsurancePolicyNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
@@ -863,7 +857,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
-                    b.Property<int>("UserInsuranceProviderId")
+                    b.Property<int?>("UserInsuranceProviderId")
                         .HasColumnType("int");
 
                     b.HasIndex("MedicalRecordId")
@@ -878,11 +872,11 @@ namespace Infrastructure.Migrations
                 {
                     b.HasBaseType("Domain.Entities.User.ApplicationUser");
 
-                    b.Property<int?>("DoctorId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("HireDate")
+                        .HasColumnType("date");
 
                     b.HasIndex("DoctorId");
 
@@ -894,7 +888,8 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Lookups.AppointmentStatus", "AppointmentStatus")
                         .WithMany("Appointments")
                         .HasForeignKey("AppointmentStatusId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.ClinicEntity.Clinic", "Clinic")
                         .WithMany("Appointments")
@@ -904,7 +899,8 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.User.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", "MedicalRecordEntry")
                         .WithOne("Appointment")
@@ -915,12 +911,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.User.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.TimeSlotEntity.TimeSlot", "TimeSlot")
                         .WithOne("Appointment")
                         .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "TimeSlotId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppointmentStatus");
 
@@ -954,6 +952,33 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ClinicEntity.Clinic", b =>
+                {
+                    b.HasOne("Domain.Entities.Lookups.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Lookups.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Lookups.Governorate", "Governorate")
+                        .WithMany()
+                        .HasForeignKey("GovernorateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("District");
+
+                    b.Navigation("Governorate");
+                });
+
             modelBuilder.Entity("Domain.Entities.DoctorCertificateEntity.DoctorCertificate", b =>
                 {
                     b.HasOne("Domain.Entities.User.Doctor", "Doctor")
@@ -970,17 +995,20 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.AppointmentEntities.Appointment", "Appointment")
                         .WithMany("Feedbacks")
                         .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User.Doctor", "Doctor")
                         .WithMany("FeedbackRecievedByMe")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User.Patient", "Patient")
                         .WithMany("FeedbackRecievedByMe")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Appointment");
 
@@ -1053,27 +1081,39 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Lookups.AccountStatus", "AccountStatus")
                         .WithMany()
-                        .HasForeignKey("AccountStatusId");
+                        .HasForeignKey("AccountStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User.ApplicationRole", "ApplicationRole")
                         .WithMany()
-                        .HasForeignKey("ApplicationRoleId");
+                        .HasForeignKey("ApplicationRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Lookups.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Lookups.District", "District")
                         .WithMany()
-                        .HasForeignKey("DistrictId");
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Lookups.Gender", "Gender")
                         .WithMany()
-                        .HasForeignKey("GenderId");
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Lookups.Governorate", "Governorate")
                         .WithMany()
-                        .HasForeignKey("GovernorateId");
+                        .HasForeignKey("GovernorateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AccountStatus");
 
@@ -1144,8 +1184,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.ClinicEntity.Clinic", "Clinic")
                         .WithMany("Gallery")
                         .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Clinic");
                 });
@@ -1166,7 +1205,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Lookups.Country", "Country")
                         .WithMany("Governorates")
                         .HasForeignKey("CountryID")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Country");
@@ -1200,8 +1239,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.InsuranceProviderEntities.UserInsuranceProvider", "InsuranceProvider")
                         .WithMany("Patients")
                         .HasForeignKey("UserInsuranceProviderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("InsuranceProvider");
 
@@ -1213,7 +1251,8 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.User.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
                 });

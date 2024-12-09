@@ -16,8 +16,8 @@ namespace Application.Dtos.User
         public string ProfilePicture { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastLogin { get; set; }
-        public AccountStatus AccountStatus { get; set; }
-        public UserRoles UserRole { get; set; }
+        public AccountStatusEnum AccountStatus { get; set; }
+        public UserRolesEnum UserRole { get; set; }
         public string Address { get; set; }
         public string gender { get; set; }
         public string PhoneNumber { get; set; }

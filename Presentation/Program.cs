@@ -9,6 +9,8 @@ using Domain.Entities.User;
 using System.Text;
 using Presentation.Middlewares;
 using Infrastructure.Data.Seeds;
+using Infrastructure.UnitOfWorkImplementation;
+using Domain.Interfaces.UnitOfWorkInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,7 +98,9 @@ using (var scope = app.Services.CreateScope())
     {
         var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        await SeedsMaster.SeedAsync(roleManager, userManager);
+        var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+
+        await SeedsMaster.SeedAsync(roleManager, userManager, unitOfWork);
     }
     catch (Exception ex)
     {

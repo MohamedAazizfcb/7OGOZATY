@@ -11,6 +11,8 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         builder.HasMany(c => c.Governorates)
             .WithOne(g => g.Country)
             .HasForeignKey(g => g.CountryID)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
+
+
     }
 }

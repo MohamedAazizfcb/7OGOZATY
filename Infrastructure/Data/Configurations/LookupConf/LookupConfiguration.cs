@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Lookups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 public class LookupConfiguration : IEntityTypeConfiguration<Lookup>
 {

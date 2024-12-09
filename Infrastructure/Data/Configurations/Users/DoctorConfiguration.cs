@@ -15,9 +15,6 @@ namespace Infrastructure.Data.Configurations.Users
             builder.Property(d => d.Brief)
                    .HasMaxLength(500); // Optional: Adjust based on requirements
 
-            builder.Property(d => d.CertificateId)
-                   .IsRequired(false);
-
             // Relationships
             builder.HasOne(d => d.Clinic)
                    .WithMany(c => c.Doctors)

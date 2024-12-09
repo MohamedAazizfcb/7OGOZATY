@@ -9,10 +9,10 @@ namespace Domain.Entities.SpecializationServicesEntity
 
         // Foreign Keys
         public int SpecializationServiceId { get; set; }
-        public virtual SpecializationService SpecializationService { get; set; } = null!;
+        public virtual SpecializationService? SpecializationService { get; set; }
 
         public int DoctorId { get; set; }
-        public virtual Doctor Doctor { get; set; } = null!;
+        public virtual Doctor Doctor { get; set; }
 
     }
 }

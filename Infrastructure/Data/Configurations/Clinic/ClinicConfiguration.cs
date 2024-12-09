@@ -14,8 +14,6 @@ namespace Infrastructure.Data.Configurations.ClinicConf
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(c => c.Address)
-                   .HasMaxLength(200);
 
             builder.Property(c => c.Phone)
                    .HasMaxLength(15);
@@ -29,9 +27,10 @@ namespace Infrastructure.Data.Configurations.ClinicConf
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.Gallery)
-                   .WithOne(d => d.Clinic)
-                   .HasForeignKey(d => d.ClinicId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                           .WithOne(d => d.Clinic)
+                           .HasForeignKey(d => d.ClinicId)
+                           .IsRequired(false)
+                           .OnDelete(DeleteBehavior.Cascade);
 
             // Appointments relationship
             builder.HasMany(d => d.Appointments)

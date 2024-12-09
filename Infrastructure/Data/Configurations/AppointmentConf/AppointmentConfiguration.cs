@@ -11,7 +11,6 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
         {
             builder.HasKey(a => a.Id);
 
-            builder.Property(a => a.AppointmentDate).IsRequired();
             builder.Property(a => a.Notes)
                    .HasMaxLength(1000)
                    .IsRequired(false); // Make notes optional
@@ -19,33 +18,28 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
             builder.HasOne(a => a.TimeSlot) // One Appointment to one TimeSlot
                .WithOne(ts => ts.Appointment) // TimeSlot can be linked to at most one Appointment
                .HasForeignKey<Appointment>(a => a.TimeSlotId) // Foreign key property
-               .OnDelete(DeleteBehavior.SetNull) // Set TimeSlotId to null if the Appointment is deleted
-               .IsRequired(false); // TimeSlotId is optional
+               .OnDelete(DeleteBehavior.Cascade); // Set TimeSlotId to null if the Appointment is deleted
 
 
             builder.HasOne(a => a.AppointmentStatus)
                    .WithMany(aps => aps.Appointments)
                    .HasForeignKey(a => a.AppointmentStatusId)
-                   .OnDelete(DeleteBehavior.SetNull) // Set to null if AppointmentStatus is deleted
-                   .IsRequired(false); // AppointmentStatus is optional
+                   .OnDelete(DeleteBehavior.Cascade); // Set to null if AppointmentStatus is deleted
 
             builder.HasOne(a => a.Clinic)
                    .WithMany(c => c.Appointments)
                    .HasForeignKey(a => a.ClinicId)
-                   .OnDelete(DeleteBehavior.SetNull) // Allow Clinic to be null if deleted
-                   .IsRequired(false); // Clinic is optional
+                   .OnDelete(DeleteBehavior.SetNull); // Allow Clinic to be null if deleted
 
             builder.HasOne(a => a.Doctor)
                    .WithMany(d => d.Appointments)
                    .HasForeignKey(a => a.DoctorId)
-                   .OnDelete(DeleteBehavior.SetNull) // Set to null if Doctor is deleted
-                   .IsRequired(false); // Doctor is optional
+                   .OnDelete(DeleteBehavior.Cascade); // Set to null if Doctor is deleted
 
             builder.HasOne(a => a.Patient)
                    .WithMany(p => p.Appointments)
                    .HasForeignKey(a => a.PatientID)
-                   .OnDelete(DeleteBehavior.SetNull) // Set to null if Patient is deleted
-                   .IsRequired(false); // Patient is optional
+                   .OnDelete(DeleteBehavior.Cascade); // Set to null if Patient is deleted
 
             builder.HasMany(a => a.AppointmentServicesPivots)
                    .WithOne(s => s.Appointment)

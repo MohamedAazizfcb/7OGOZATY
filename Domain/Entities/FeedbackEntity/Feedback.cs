@@ -7,16 +7,16 @@ namespace Domain.Entities.FeedbackEntity
     {
         public int Id { get; set; } // Primary Key
         public int Rating { get; set; } // Rating out of 5
-        public string Comment { get; set; } = string.Empty; // Feedback comment
+        public string Comment { get; set; }
 
         // Foreign Keys
-        public int? AppointmentId { get; set; } // Foreign Key to Appointment
+        public int AppointmentId { get; set; } // Foreign Key to Appointment
         public virtual Appointment Appointment { get; set; }
 
-        public int? DoctorId { get; set; } // Doctor Recieving feedback
+        public int DoctorId { get; set; } // Doctor Recieving feedback
         public virtual Doctor Doctor { get; set; }
 
-        public int? PatientId { get; set; } // Patient Recieving feedback
+        public int PatientId { get; set; } // Patient Recieving feedback
         public virtual Patient Patient { get; set; }
     }
 

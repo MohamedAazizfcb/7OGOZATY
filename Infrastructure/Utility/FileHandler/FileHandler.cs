@@ -27,7 +27,7 @@ namespace Infrastructure.Utility.FileHandler
                 throw new InvalidOperationException("Error while uploading the file.", ex);
             }
 
-            return uniqueFileName;
+            return path;
         }
 
         public void Delete(string filePath)

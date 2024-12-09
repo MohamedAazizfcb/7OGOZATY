@@ -18,16 +18,15 @@ namespace Domain.Entities.User
         public int? SpecializationId { get; set; }
         public virtual Specialization? Specialization { get; set; }
 
-        public int? CertificateId { get; set; }
-        public virtual ICollection<DoctorCertificate> DoctorCertificates { get; set; } = new List<DoctorCertificate>();
+        public virtual IEnumerable<DoctorCertificate>? DoctorCertificates { get; set; }
 
-        public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+        public virtual IEnumerable<TimeSlot>? TimeSlots { get; set; }
 
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public virtual IEnumerable<Appointment>? Appointments { get; set; }
 
-        public virtual ICollection<Feedback> FeedbackRecievedByMe { get; set; } = new List<Feedback>();
+        public virtual IEnumerable<Feedback>? FeedbackRecievedByMe { get; set; }
 
-        public virtual ICollection<DoctorServicePivot> DoctorServicePivots { get; set; } = new List<DoctorServicePivot>();
+        public virtual IEnumerable<DoctorServicePivot>? DoctorServicePivots { get; set; }
 
     }
 }

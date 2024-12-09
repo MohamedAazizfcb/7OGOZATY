@@ -14,10 +14,10 @@ namespace Infrastructure.Data.Seeds
         {
             var roles = new Dictionary<string, IReadOnlyList<string>>()
             {
-                { UserRoles.Admin.ToString(), AdminPermissions.Permissions },
-                { UserRoles.Doctor.ToString(), DoctorPermissions.Permissions },
-                { UserRoles.Patient.ToString(), PatientPermissions.Permissions },
-                { UserRoles.Secretary.ToString(), SecretaryPermissions.Permissions }
+                { UserRolesEnum.Admin.ToString(), AdminPermissions.Permissions },
+                { UserRolesEnum.Doctor.ToString(), DoctorPermissions.Permissions },
+                { UserRolesEnum.Patient.ToString(), PatientPermissions.Permissions },
+                { UserRolesEnum.Secretary.ToString(), SecretaryPermissions.Permissions }
             };
 
             foreach (var role in roles)

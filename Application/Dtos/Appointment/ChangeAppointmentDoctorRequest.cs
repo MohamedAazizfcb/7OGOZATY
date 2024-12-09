@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.Appointment
+namespace Application.Dtos.AppointmentDTO
 {
     public class ChangeAppointmentDoctorRequest
     {

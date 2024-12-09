@@ -10,10 +10,10 @@ namespace Domain.Entities.User
         public int MedicalRecordId { get; set; } // Foreign Key to MedicalRecord
         public virtual MedicalRecord MedicalRecord { get; set; } = null!;
 
-        public int UserInsuranceProviderId { get; set; } // Foreign Key to InsuranceProvider
-        public virtual UserInsuranceProvider InsuranceProvider { get; set; } = null!;
+        public int? UserInsuranceProviderId { get; set; } // Foreign Key to InsuranceProvider
+        public virtual UserInsuranceProvider? InsuranceProvider { get; set; } = null!;
 
-        public string InsurancePolicyNumber { get; set; } = string.Empty;
+        public string? InsurancePolicyNumber { get; set; } = string.Empty;
 
 
         public string EmergencyContactName { get; set; } = string.Empty; // Emergency contact name
@@ -21,9 +21,9 @@ namespace Domain.Entities.User
         public string BloodType { get; set; } = string.Empty; // Patient's blood type
         public string Notes { get; set; } = string.Empty; // Additional notes
 
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public virtual IEnumerable<Appointment>? Appointments { get; set; }
 
-        public virtual ICollection<Feedback> FeedbackRecievedByMe { get; set; } = new List<Feedback>();
+        public virtual IEnumerable<Feedback>? FeedbackRecievedByMe { get; set; }
 
 
     }

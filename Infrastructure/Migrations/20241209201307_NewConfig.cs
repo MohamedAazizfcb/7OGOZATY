@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class NewConfig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,29 +47,6 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Clinic",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clinic", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Lookup",
                 columns: table => new
                 {
@@ -92,7 +69,7 @@ namespace Infrastructure.Migrations
                         column: x => x.CountryID,
                         principalTable: "Lookup",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Lookup_Lookup_GovernorateID",
                         column: x => x.GovernorateID,
@@ -160,27 +137,40 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "BaseGallery",
+                name: "Clinic",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ImageUrl = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ImageDescription = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UploadedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Discriminator = table.Column<string>(type: "varchar(13)", maxLength: 13, nullable: false)
+                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClinicId = table.Column<int>(type: "int", nullable: true)
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    GovernorateId = table.Column<int>(type: "int", nullable: false),
+                    DistrictId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaseGallery", x => x.Id);
+                    table.PrimaryKey("PK_Clinic", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseGallery_Clinic_ClinicId",
-                        column: x => x.ClinicId,
-                        principalTable: "Clinic",
+                        name: "FK_Clinic_Lookup_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Clinic_Lookup_DistrictId",
+                        column: x => x.DistrictId,
+                        principalTable: "Lookup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Clinic_Lookup_GovernorateId",
+                        column: x => x.GovernorateId,
+                        principalTable: "Lookup",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -255,19 +245,18 @@ namespace Infrastructure.Migrations
                     ProfilePicture = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    GenderId = table.Column<int>(type: "int", nullable: true),
-                    CountryId = table.Column<int>(type: "int", nullable: true),
-                    GovernorateId = table.Column<int>(type: "int", nullable: true),
-                    DistrictId = table.Column<int>(type: "int", nullable: true),
-                    AccountStatusId = table.Column<int>(type: "int", nullable: true),
-                    ApplicationRoleId = table.Column<int>(type: "int", nullable: true),
+                    GenderId = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    GovernorateId = table.Column<int>(type: "int", nullable: false),
+                    DistrictId = table.Column<int>(type: "int", nullable: false),
+                    AccountStatusId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationRoleId = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Brief = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClinicId = table.Column<int>(type: "int", nullable: true),
                     SpecializationId = table.Column<int>(type: "int", nullable: true),
-                    CertificateId = table.Column<int>(type: "int", nullable: true),
                     MedicalRecordId = table.Column<int>(type: "int", nullable: true),
                     UserInsuranceProviderId = table.Column<int>(type: "int", nullable: true),
                     InsurancePolicyNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
@@ -281,7 +270,7 @@ namespace Infrastructure.Migrations
                     Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DoctorId = table.Column<int>(type: "int", nullable: true),
-                    HireDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    HireDate = table.Column<DateOnly>(type: "date", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -297,7 +286,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
+                    PhoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -312,7 +301,8 @@ namespace Infrastructure.Migrations
                         name: "FK_AspNetUsers_AspNetRoles_ApplicationRoleId",
                         column: x => x.ApplicationRoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
@@ -329,27 +319,32 @@ namespace Infrastructure.Migrations
                         name: "FK_AspNetUsers_Lookup_AccountStatusId",
                         column: x => x.AccountStatusId,
                         principalTable: "Lookup",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Lookup_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Lookup",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Lookup_DistrictId",
                         column: x => x.DistrictId,
                         principalTable: "Lookup",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Lookup_GenderId",
                         column: x => x.GenderId,
                         principalTable: "Lookup",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Lookup_GovernorateId",
                         column: x => x.GovernorateId,
                         principalTable: "Lookup",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Lookup_SpecializationId",
                         column: x => x.SpecializationId,
@@ -368,6 +363,32 @@ namespace Infrastructure.Migrations
                         principalTable: "UserInsuranceProvider",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "BaseGallery",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ImageUrl = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImageDescription = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Discriminator = table.Column<string>(type: "varchar(13)", maxLength: 13, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClinicId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseGallery", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaseGallery_Clinic_ClinicId",
+                        column: x => x.ClinicId,
+                        principalTable: "Clinic",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -478,8 +499,8 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IssuingAuthority = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IssuedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IssuedDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ExpiryDate = table.Column<DateOnly>(type: "date", nullable: true),
                     CertificateFilePath = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DoctorId = table.Column<int>(type: "int", nullable: false)
@@ -529,7 +550,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
@@ -559,14 +580,13 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    AppointmentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TimeSlotId = table.Column<int>(type: "int", nullable: true),
-                    AppointmentStatusId = table.Column<int>(type: "int", nullable: true),
+                    TimeSlotId = table.Column<int>(type: "int", nullable: false),
+                    AppointmentStatusId = table.Column<int>(type: "int", nullable: false),
                     ClinicId = table.Column<int>(type: "int", nullable: true),
-                    DoctorId = table.Column<int>(type: "int", nullable: true),
-                    PatientID = table.Column<int>(type: "int", nullable: true),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    PatientID = table.Column<int>(type: "int", nullable: false),
                     MedicalRecordEntryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -577,13 +597,13 @@ namespace Infrastructure.Migrations
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Appointment_AspNetUsers_PatientID",
                         column: x => x.PatientID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Appointment_Clinic_ClinicId",
                         column: x => x.ClinicId,
@@ -595,7 +615,7 @@ namespace Infrastructure.Migrations
                         column: x => x.AppointmentStatusId,
                         principalTable: "Lookup",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Appointment_MedicalRecordEntry_Id",
                         column: x => x.Id,
@@ -607,7 +627,7 @@ namespace Infrastructure.Migrations
                         column: x => x.TimeSlotId,
                         principalTable: "TimeSlot",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -645,9 +665,9 @@ namespace Infrastructure.Migrations
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AppointmentId = table.Column<int>(type: "int", nullable: true),
-                    DoctorId = table.Column<int>(type: "int", nullable: true),
-                    PatientId = table.Column<int>(type: "int", nullable: true)
+                    AppointmentId = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -657,19 +677,19 @@ namespace Infrastructure.Migrations
                         column: x => x.AppointmentId,
                         principalTable: "Appointment",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Feedback_AspNetUsers_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Feedback_AspNetUsers_PatientId",
                         column: x => x.PatientId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -803,6 +823,21 @@ namespace Infrastructure.Migrations
                 column: "ClinicId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clinic_CountryId",
+                table: "Clinic",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clinic_DistrictId",
+                table: "Clinic",
+                column: "DistrictId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clinic_GovernorateId",
+                table: "Clinic",
+                column: "GovernorateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DoctorCertificate_DoctorId",
                 table: "DoctorCertificate",
                 column: "DoctorId");
@@ -913,13 +948,13 @@ namespace Infrastructure.Migrations
                 name: "Clinic");
 
             migrationBuilder.DropTable(
-                name: "Lookup");
-
-            migrationBuilder.DropTable(
                 name: "MedicalRecord");
 
             migrationBuilder.DropTable(
                 name: "UserInsuranceProvider");
+
+            migrationBuilder.DropTable(
+                name: "Lookup");
         }
     }
 }

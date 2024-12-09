@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.Appointment
+namespace Application.Dtos.AppointmentDTO
 {
     public class GetAppointmentResponse
     {
@@ -16,7 +16,7 @@ namespace Application.Dtos.Appointment
         public string PatientId { get; set; }
         public string DoctorId { get; set; }
         //public ScheduleDetail Slot { get; set; }
-        public AppointmentStatus Status { get; set; }
+        public AppointmentStatusEnum Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

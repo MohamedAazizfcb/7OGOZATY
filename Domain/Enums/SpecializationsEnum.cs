@@ -1,8 +1,8 @@
 ﻿namespace Domain.Enums
 {
-    public enum Specializations
+    public enum SpecializationsEnum
     {
-        Dentist,
+        Dentist=35,
         GeneralPractitioner,
         Cardiologist,
         Dermatologist,

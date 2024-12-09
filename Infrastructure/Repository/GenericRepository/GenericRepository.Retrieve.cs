@@ -19,16 +19,48 @@ namespace Infrastructure.Repository.Implementations
             return query.ToList();
         }
 
-        public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> filter)
-        {
-            return await _dbSet.FirstOrDefaultAsync(filter);
-        }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null!)
+        public virtual async Task<T?> GetAsync(Expression<Func<T, object>>[] includes = null!, Expression<Func<T, bool>> filter = null!)
         {
             IQueryable<T> query = _dbSet.AsNoTracking();
+
+            // Apply the filter
+            query = query.Where(filter);
+
+            // Include related entities using the includes
+            if (includes!=null && includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            // Execute the query and return the first or default result
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, object>>[] includes = null!, Expression<Func<T, bool>> filter = null!)
+        {
+            IQueryable<T> query = _dbSet.AsNoTracking();
+
+            // Apply the filter if it's provided
             if (filter != null)
+            {
                 query = query.Where(filter);
+            }
+
+            // Include related entities using the includes
+            if (includes != null && includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            // Execute the query and return the result
             return await query.ToListAsync();
         }
 
@@ -37,9 +69,21 @@ namespace Infrastructure.Repository.Implementations
             return _dbSet.Find(id)!;
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id, Expression<Func<T, object>>[] includes = null!)
         {
-            return await _dbSet.FindAsync(id);
+            IQueryable<T> query = _dbSet.AsNoTracking();
+
+            // Include related entities using the includes
+            if (includes != null && includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            // Execute the query and return the entity with the specified ID
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
     }
 }
