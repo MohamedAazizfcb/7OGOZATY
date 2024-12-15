@@ -1,8 +1,8 @@
 ﻿namespace Domain.Entities.ClinicEntity
 {
-    public class ClinicGallery : BaseGallery
+    public class ClinicGallery
     {
-        public int ClinicId { get; set; } // Foreign Key
-        public Clinic Clinic { get; set; }
+        public int Id { get; set; }
+        public string imgUrl { get; set; }
     }
 }

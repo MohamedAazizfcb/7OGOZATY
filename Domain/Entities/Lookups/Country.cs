@@ -2,6 +2,6 @@
 {
     public class Country : Lookup
     {
-        public IEnumerable<Governorate>? Governorates { get; set; }
+        public ICollection<Governorate>? Governorates { get; set; }
     }
 }

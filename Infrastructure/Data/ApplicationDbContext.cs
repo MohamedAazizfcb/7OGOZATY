@@ -4,7 +4,6 @@ using Infrastructure.Data.Configurations.AppointmentConf;
 using Infrastructure.Data.Configurations.ClinicConf;
 using Infrastructure.Data.Configurations.DoctorCertificateConf;
 using Infrastructure.Data.Configurations.FeedbackConf;
-using Infrastructure.Data.Configurations.Gallery;
 using Infrastructure.Data.Configurations.InsuranceProviderConf;
 using Infrastructure.Data.Configurations.LookupConf;
 using Infrastructure.Data.Configurations.MedicalRecordConf;
@@ -28,9 +27,7 @@ namespace Infrastructure.Data
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-            modelBuilder.ApplyConfiguration(new GalleryConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicConfiguration());
-            modelBuilder.ApplyConfiguration(new ClinicGalleryConfigurations());
             modelBuilder.ApplyConfiguration(new DoctorCertificateConfiguration());
             modelBuilder.ApplyConfiguration(new InsuranceProviderConfiguration());
             modelBuilder.ApplyConfiguration(new MedicalRecordEntryConfiguration());

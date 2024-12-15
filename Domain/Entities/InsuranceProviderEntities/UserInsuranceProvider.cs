@@ -9,6 +9,6 @@ namespace Domain.Entities.InsuranceProviderEntities
         public string ContactInfo { get; set; } 
         public string Notes { get; set; }
 
-        public IEnumerable<Patient>? Patients { get; set; }
+        public ICollection<Patient>? Patients { get; set; }
     }
 }

@@ -11,6 +11,6 @@ namespace Domain.Entities.MedicalRecordEntities
 
 
         // Collection of MedicalRecordEntry
-        public virtual IEnumerable<MedicalRecordEntry> Entries { get; set; }
+        public virtual ICollection<MedicalRecordEntry> Entries { get; set; }
     }
 }

@@ -5,6 +5,6 @@
         public int CountryID { get; set; }
         public Country Country { get; set; } = null!;
 
-        public IEnumerable<District>? Districts { get; set; }
+        public ICollection<District>? Districts { get; set; }
     }
 }

@@ -8,11 +8,11 @@ namespace Application.Contracts
     public interface IClinicService
     {
         Task<OperationResultSingle<string>> CreateAsync(ClinicRequest request);
-        Task<OperationResultSingle<IEnumerable<ClinicResponse>>> GetAllAsync();
+        Task<OperationResultSingle<ICollection<ClinicResponse>>> GetAllAsync();
         Task<OperationResultSingle<ClinicResponse>> GetByIdAsync(int id);
         Task<OperationResultSingle<string>> UpdateAsync(int id, ClinicRequest request);
         Task<OperationResultSingle<string>> DeleteAsync(int id);
-        Task<OperationResultSingle<IEnumerable<Doctor>>> GetClinicDoctors(int id);
-        Task<OperationResultSingle<IEnumerable<Appointment>>> GetClinicAppointments(int id);
+        Task<OperationResultSingle<ICollection<Doctor>>> GetClinicDoctors(int id);
+        Task<OperationResultSingle<ICollection<Appointment>>> GetClinicAppointments(int id);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Application.Contracts;
-using Application.Dtos;
 using Application.Dtos.Clinic;
 using AutoMapper;
-using Azure.Core;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.ClinicEntity;
 using Domain.Entities.User;
@@ -10,9 +8,9 @@ using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Interfaces.UtilityInterfaces.FileHandlerInterfaces;
 using Domain.Results;
-using Infrastructure.Utility.FileHandler;
 using Microsoft.AspNetCore.Http;
-using System.IO;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Application.Services
@@ -23,7 +21,7 @@ namespace Application.Services
         private readonly IOperationResultFactory _operationResultFactory;
         private readonly IMapper _mapper;
         private readonly IFileHandler _fileHandler;
-
+        private readonly string CLINIC_GALLERY_PATH = Path.Combine("wwwroot", "uploads", "Clinics");
         public ClinicService(IUnitOfWork unitOfWork, IOperationResultFactory operationResultFactory, IMapper mapper, IFileHandler fileHandler)
         {
             _unitOfWork = unitOfWork;
@@ -35,13 +33,23 @@ namespace Application.Services
         public async Task<OperationResultSingle<string>> CreateAsync(ClinicRequest request)
         {
             var repository = _unitOfWork.GetRepository<Clinic>();
-            await repository.AddAsync(_mapper.Map<Clinic>(request));
 
+            var clinic = _mapper.Map<Clinic>(request);
+
+            clinic.ClinicGallery = new Collection<ClinicGallery>();
+            var galleryFolder = GetClinicGalleryFolder(clinic.Email);
+
+            foreach (var img in request.Gallery)
+            {
+                var galleryImg = new ClinicGallery()
+                {
+                    imgUrl = await _fileHandler.UploadAsync(img, galleryFolder)
+                };
+                clinic.ClinicGallery.Add(galleryImg);
+            }
+
+            await repository.AddAsync(clinic);
             await _unitOfWork.SaveAsync();
-
-
-            Expression<Func<Clinic, bool>> filter = c => c.Email == request.Email;
-            var clinic = await repository.GetAsync(null!, filter);
 
             return _operationResultFactory.Success("Done")!;
         }
@@ -52,6 +60,12 @@ namespace Application.Services
             var entity = await repository.GetByIdAsync(id);
             if (entity != null)
             {
+                var galleryFolder = GetClinicGalleryFolder(entity.Email);
+
+                if (Directory.Exists(galleryFolder))
+                {
+                    Directory.Delete(galleryFolder, true);
+                }
                 await repository.DeleteAsync(entity);
                 await _unitOfWork.SaveAsync();
                 return _operationResultFactory.Success("Done")!;
@@ -62,19 +76,19 @@ namespace Application.Services
             }
         }
 
-        public async Task<OperationResultSingle<IEnumerable<ClinicResponse>>> GetAllAsync()
+        public async Task<OperationResultSingle<ICollection<ClinicResponse>>> GetAllAsync()
         {
             var repository = _unitOfWork.GetRepository<Clinic>();
             Expression<Func<Clinic, object>>[] includes = [
                 c => c.Country,
                 c => c.Governorate,
                 c => c.District,
-                c => c.Gallery,
+                c => c.ClinicGallery,
             ];
 
             var result = await repository.GetAllAsync(includes);
 
-            var mappedResult = _mapper.Map<IEnumerable<ClinicResponse>>(result);
+            var mappedResult = _mapper.Map<ICollection<ClinicResponse>>(result);
             return _operationResultFactory.Success(mappedResult)!;
         }
 
@@ -85,7 +99,7 @@ namespace Application.Services
                 c => c.Country,
                 c => c.Governorate,
                 c => c.District,
-                c => c.Gallery,
+                c => c.ClinicGallery,
             ];
 
             var result = await repository.GetByIdAsync(id, includes);
@@ -103,10 +117,32 @@ namespace Application.Services
             var oldEntity = await repository.GetByIdAsync(id);
             if (oldEntity != null)
             {
-                await repository.UpdateAsync(id, _mapper.Map(request, oldEntity)); // Maps properties from newEntity to oldEntity
-                await _unitOfWork.SaveAsync();
+                var galleryFolder = GetClinicGalleryFolder(oldEntity.Email);
+                if (Directory.Exists(galleryFolder))
+                {
+                    Directory.Delete(galleryFolder, true);
+                }
 
-                await UpdateClinicGallery(request.Gallery, id);
+                _mapper.Map(request, oldEntity); // Maps properties from newEntity to oldEntity
+
+
+                galleryFolder = GetClinicGalleryFolder(oldEntity.Email);
+
+           
+                oldEntity.ClinicGallery = new Collection<ClinicGallery>();
+                foreach (var img in request.Gallery)
+                {
+                    var galleryImg = new ClinicGallery()
+                    {
+                        imgUrl = await _fileHandler.UploadAsync(img, galleryFolder)
+                    };
+                    oldEntity.ClinicGallery.Add(galleryImg);
+
+                }
+
+
+                await repository.UpdateAsync(id, oldEntity); 
+                await _unitOfWork.SaveAsync();
 
                 return _operationResultFactory.Success("Done!")!;
             }
@@ -116,8 +152,7 @@ namespace Application.Services
             }
         }
 
-
-        public async Task<OperationResultSingle<IEnumerable<Doctor>>> GetClinicDoctors(int id)
+        public async Task<OperationResultSingle<ICollection<Doctor>>> GetClinicDoctors(int id)
         {
             var repository = _unitOfWork.GetRepository<Clinic>();
             Expression<Func<Clinic, object>>[] includes = [
@@ -127,13 +162,13 @@ namespace Application.Services
             var result = await repository.GetByIdAsync(id, includes);
             if (result == null)
             {
-                return _operationResultFactory.NotFound<IEnumerable<Doctor>>("The provided ID doesn't match any record!");
+                return _operationResultFactory.NotFound<ICollection<Doctor>>("The provided ID doesn't match any record!");
             }
             var mappedResult = result.Doctors;
             return _operationResultFactory.Success(mappedResult)!;
         }
 
-        public async Task<OperationResultSingle<IEnumerable<Appointment>>> GetClinicAppointments(int id)
+        public async Task<OperationResultSingle<ICollection<Appointment>>> GetClinicAppointments(int id)
         {
             var repository = _unitOfWork.GetRepository<Clinic>();
             Expression<Func<Clinic, object>>[] includes = [
@@ -143,47 +178,16 @@ namespace Application.Services
             var result = await repository.GetByIdAsync(id, includes);
             if (result == null)
             {
-                return _operationResultFactory.NotFound<IEnumerable<Appointment>>("The provided ID doesn't match any record!");
+                return _operationResultFactory.NotFound<ICollection<Appointment>>("The provided ID doesn't match any record!");
             }
             var mappedResult = result.Appointments;
             return _operationResultFactory.Success(mappedResult)!;
         }
 
 
-
-        private async Task CreateClinicGallery(List<IFormFile> gal, int clinicId)
+        private string GetClinicGalleryFolder(string clinicEmail)
         {
-            var repository = _unitOfWork.GetRepository<ClinicGallery>();
-            foreach(var req in gal)
-            {
-                var img = new ClinicGallery();
-                img.ClinicId = clinicId;
-                img.ImageDescription = "Desc";
-                img.ImageUrl = await _fileHandler.UploadAsync(req, Path.Combine("wwwroot", "uploads", "Clinics", clinicId.ToString()));
-                await repository.AddAsync(img);
-                await _unitOfWork.SaveAsync();
-
-            }
-        }
-        private async Task UpdateClinicGallery(List<IFormFile> gal, int clinicId)
-        {
-            var folder = Path.Combine("wwwroot", "uploads", "Clinics", clinicId.ToString());
-            if (Directory.Exists(folder))
-            {
-                Directory.Delete(folder, true);
-            }
-            
-            var repository = _unitOfWork.GetRepository<ClinicGallery>();
-            foreach (var req in gal)
-            {
-                var img = new ClinicGallery();
-                img.ClinicId = clinicId;
-                img.ImageDescription = "Desc";
-                img.ImageUrl = await _fileHandler.UploadAsync(req, folder);
-                await repository.AddAsync(img);
-                await _unitOfWork.SaveAsync();
-
-            }
+            return Path.Combine(CLINIC_GALLERY_PATH, clinicEmail);
         }
 
     }

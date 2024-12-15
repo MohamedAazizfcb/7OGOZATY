@@ -26,7 +26,7 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpPut("updateClinic")]
+        [HttpPut("updateClinic/{id}")]
         public async Task<IActionResult> UpdateClinic([FromForm] ClinicRequest req, [FromRoute] int id)
         {
             var result = await _clinicService.UpdateAsync(id, req);
@@ -40,28 +40,28 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpGet("getClinic{id}")]
+        [HttpGet("getClinic/{id}")]
         public async Task<IActionResult> GetClinicById([FromRoute] int id)
         {
             var result = await _clinicService.GetByIdAsync(id);
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpGet("getClinicDoctors{id}")]
+        [HttpGet("getClinicDoctors/{id}")]
         public async Task<IActionResult> GetClinicDoctors([FromRoute] int id)
         {
             var result = await _clinicService.GetClinicDoctors(id);
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpGet("getClinicAppointments{id}")]
+        [HttpGet("getClinicAppointments/{id}")]
         public async Task<IActionResult> GetClinicAppointments([FromRoute] int id)
         {
             var result = await _clinicService.GetClinicAppointments(id);
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpDelete("deleteClinic{id}")]
+        [HttpDelete("deleteClinic/{id}")]
         public async Task<IActionResult> DeleteClinic([FromRoute] int id)
         {
             var result = await _clinicService.DeleteAsync(id);

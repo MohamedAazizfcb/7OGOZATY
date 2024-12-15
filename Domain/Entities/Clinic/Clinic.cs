@@ -20,10 +20,10 @@ namespace Domain.Entities.ClinicEntity
 
         public int DistrictId { get; set; }
         public virtual District District { get; set; }
+        public virtual ICollection<ClinicGallery>? ClinicGallery { get; set; }
 
-        public virtual IEnumerable<Doctor>? Doctors { get; set; }
-        public virtual IEnumerable<ClinicGallery>? Gallery { get; set; }
-        public virtual IEnumerable<Appointment>? Appointments { get; set; }
+        public virtual ICollection<Doctor>? Doctors { get; set; }
+        public virtual ICollection<Appointment>? Appointments { get; set; }
 
     }
 }

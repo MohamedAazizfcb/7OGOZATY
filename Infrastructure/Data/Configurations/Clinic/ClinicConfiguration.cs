@@ -26,11 +26,6 @@ namespace Infrastructure.Data.Configurations.ClinicConf
                    .HasForeignKey(d => d.ClinicId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(c => c.Gallery)
-                           .WithOne(d => d.Clinic)
-                           .HasForeignKey(d => d.ClinicId)
-                           .IsRequired(false)
-                           .OnDelete(DeleteBehavior.Cascade);
 
             // Appointments relationship
             builder.HasMany(d => d.Appointments)

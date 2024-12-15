@@ -30,13 +30,13 @@ namespace Domain.Entities.AppointmentEntities
         public int PatientID { get; set; }
         public virtual Patient Patient { get; set; }
 
-        public virtual IEnumerable<AppointmentServicesPivot>? AppointmentServicesPivots { get; set; } 
+        public virtual ICollection<AppointmentServicesPivot>? AppointmentServicesPivots { get; set; } 
 
         public int MedicalRecordEntryId { get; set; } // Foreign Key to Patient
         public virtual MedicalRecordEntry MedicalRecordEntry { get; set; } = null!; // Navigation Property
 
         // Feedbacks given on this appointment
-        public virtual IEnumerable<Feedback>? Feedbacks { get; set; } 
+        public virtual ICollection<Feedback>? Feedbacks { get; set; } 
 
 
     }

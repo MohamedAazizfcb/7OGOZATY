@@ -21,9 +21,9 @@ namespace Domain.Entities.User
         public string BloodType { get; set; } = string.Empty; // Patient's blood type
         public string Notes { get; set; } = string.Empty; // Additional notes
 
-        public virtual IEnumerable<Appointment>? Appointments { get; set; }
+        public virtual ICollection<Appointment>? Appointments { get; set; }
 
-        public virtual IEnumerable<Feedback>? FeedbackRecievedByMe { get; set; }
+        public virtual ICollection<Feedback>? FeedbackRecievedByMe { get; set; }
 
 
     }
