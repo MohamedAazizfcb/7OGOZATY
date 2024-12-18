@@ -6,6 +6,7 @@ using Application.Factories;
 using Application.Services;
 using Application.Services.Authentication;
 using Application.Services.Lookups;
+using Application.Strategies.UserStrategies.CreateNewUserStrategy;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -41,6 +42,18 @@ namespace Application
 
             services.AddScoped<IClinicService, ClinicService>();
 
+
+            // Register strategies as scoped services
+            services.AddScoped<ICreateNewUserStrategy, CreateNewAdminStrategy>();
+            services.AddScoped<ICreateNewUserStrategy, CreateNewDoctorStrategy>();
+            services.AddScoped<ICreateNewUserStrategy, CreateNewPatientStrategy>();
+            services.AddScoped<ICreateNewUserStrategy, CreateNewSecretaryStrategy>();
+            services.AddScoped<CreateNewAdminStrategy>();
+            services.AddScoped<CreateNewDoctorStrategy>();
+            services.AddScoped<CreateNewPatientStrategy>();
+            services.AddScoped<CreateNewSecretaryStrategy>();
+            // Register the factory that resolves the appropriate strategy
+            services.AddScoped<CreateNewUserStrategyFactory>();
 
             //services.AddScoped<IUserService, UserService>();
             //services.AddScoped<ILookupService, LookupService>();

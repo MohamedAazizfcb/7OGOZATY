@@ -2,7 +2,7 @@
 {
     public enum UserRolesEnum
     {
-        Admin=25,
+        Admin=1,
         Doctor,
         Patient,
         Secretary

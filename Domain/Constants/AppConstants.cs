@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Constants
+﻿namespace Domain.Constants
 {
     public static class AppConstants
     {
         public const string Permission = "Permission";
 
         public static string wwwroot = "wwwroot\\";
+
+        public static string USERS_PROFILE_PICTURES_FOLDER_PATH = Path.Combine("wwwroot", "uploads", "profile_pictures");
 
 
         //public const string roles = "roles";

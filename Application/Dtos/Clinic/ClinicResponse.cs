@@ -9,8 +9,15 @@ namespace Application.Dtos.Clinic
     {
         public int Id { get; set; } // Primary Key
         public string Name { get; set; }
-        public string Address_En { get; set; }
-        public string Address_Ar { get; set; }
+        public string? Country_En { get; set; }
+        public string? Country_Ar { get; set; }
+
+
+        public string? Governorate_En { get; set; }
+        public string? Governorate_Ar { get; set; }
+
+        public string? District_En { get; set; }
+        public string? District_Ar { get; set; }
 
         public string Phone { get; set; }
         public string Email { get; set; }

@@ -1,8 +1,8 @@
-﻿namespace Application.Dtos.Authentication
+﻿namespace Application.Dtos.Authentication.Request
 {
     public class CreateSecretaryRequest : BaseCreateUserRequest
     {
         public int DoctorId { get; set; }
-        public DateTime HireDate { get; set; }
+        public DateOnly HireDate { get; set; }
     }
 }

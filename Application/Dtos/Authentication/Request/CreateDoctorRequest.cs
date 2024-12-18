@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Authentication
+﻿namespace Application.Dtos.Authentication.Request
 {
     public class CreateDoctorRequest : BaseCreateUserRequest
     {

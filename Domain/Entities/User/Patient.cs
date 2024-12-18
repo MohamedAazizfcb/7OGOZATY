@@ -7,8 +7,8 @@ namespace Domain.Entities.User
 {
     public class Patient : ApplicationUser
     {
-        public int MedicalRecordId { get; set; } // Foreign Key to MedicalRecord
-        public virtual MedicalRecord MedicalRecord { get; set; } = null!;
+        public int? MedicalRecordId { get; set; } // Foreign Key to MedicalRecord
+        public virtual MedicalRecord? MedicalRecord { get; set; } = null!;
 
         public int? UserInsuranceProviderId { get; set; } // Foreign Key to InsuranceProvider
         public virtual UserInsuranceProvider? InsuranceProvider { get; set; } = null!;

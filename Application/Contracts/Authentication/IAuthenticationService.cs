@@ -1,4 +1,7 @@
 ﻿using Application.Dtos.Authentication;
+using Application.Dtos.Authentication.Request;
+using Application.Dtos.Authentication.Response;
+using Domain.Enums;
 using Domain.Results;
 
 namespace Application.Contracts.Authentication
@@ -6,9 +9,8 @@ namespace Application.Contracts.Authentication
     public interface IAuthenticationService
     {
         Task<OperationResultSingle<AuthenticationResponse>> LoginAsync(LoginRequest request);
-        Task<OperationResultSingle<string>> CreateDoctorAsync(CreateDoctorRequest request);
-        Task<OperationResultSingle<string>> CreatePatientAsync(CreatePatientRequest request);
-        Task<OperationResultSingle<string>> CreateSecretaryAsync(CreateSecretaryRequest request);
+        Task<OperationResultSingle<string>> CreateUserAsync(BaseCreateUserRequest request, UserRolesEnum userRole);
+
 
         //Task<Response<GetUserResponse>> RefreshTokenAsync(string token);
         //Task<Response<bool>> RevokeTokenAsync(string token);

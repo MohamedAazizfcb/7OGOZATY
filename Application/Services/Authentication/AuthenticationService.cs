@@ -1,5 +1,8 @@
 ﻿using Application.Contracts.Authentication;
 using Application.Dtos.Authentication;
+using Application.Dtos.Authentication.Request;
+using Application.Dtos.Authentication.Response;
+using Application.Strategies.UserStrategies.CreateNewUserStrategy;
 using AutoMapper;
 using Domain.Entities.User;
 using Domain.Enums;
@@ -7,6 +10,8 @@ using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UtilityInterfaces.FileHandlerInterfaces;
 using Domain.Results;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Application.Services.Authentication
 {
@@ -17,92 +22,41 @@ namespace Application.Services.Authentication
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IMapper _mapper;
         private readonly IOperationResultFactory _operationResultFactory;
-
         private readonly IFileHandler _fileHandler;
 
-        public AuthentictionService(UserManager<ApplicationUser> userManager, IJwtTokenService jwtTokenService, IMapper mapper, IOperationResultFactory operationResultFactory, IFileHandler fileHandler)
+        private readonly CreateNewUserStrategyFactory _createNewUserStrategyFactory;
+        public AuthentictionService(UserManager<ApplicationUser> userManager, IJwtTokenService jwtTokenService, IMapper mapper, 
+            IOperationResultFactory operationResultFactory, IFileHandler fileHandler, 
+            CreateNewUserStrategyFactory createNewUserStrategyFactory)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
             _mapper = mapper;
             _operationResultFactory = operationResultFactory;
             _fileHandler = fileHandler;
+            _createNewUserStrategyFactory = createNewUserStrategyFactory;
         }
 
-        public async Task<OperationResultSingle<string>> CreateDoctorAsync(CreateDoctorRequest request)
+        public async Task<OperationResultSingle<string>> CreateUserAsync(BaseCreateUserRequest request, UserRolesEnum userRole)
         {
-            var user = _mapper.Map<Doctor>(request);
-            user.AccountStatusId = (int)AccountStatusEnum.Active;
-            user.LastLogin = DateTime.Now;
-            user.ApplicationRoleId = (int)UserRolesEnum.Doctor;
-
-
-            // Create the user
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
-            {
-                // Define the path where the image will be stored
-                var folderPath = Path.Combine("wwwroot", "uploads", "profile_pictures");
-                user.ProfilePicture = await _fileHandler.UploadAsync(request.ProfilePicture, folderPath);
-            }
-
-            if (!result.Succeeded)
-                return _operationResultFactory.BadRequest<string>(result.Errors.Select(e => e.Description).ToList());
-
-            return _operationResultFactory.Created("Success!");
+            var strategy = _createNewUserStrategyFactory.GetStrategy(userRole);
+            return await strategy.CreateNewUser(request);
         }
 
-        public async Task<OperationResultSingle<string>> CreatePatientAsync(CreatePatientRequest request)
-        {
-            var user = _mapper.Map<Patient>(request);
-            user.AccountStatusId = (int)AccountStatusEnum.Active;
-            user.LastLogin = DateTime.Now;
-            user.ApplicationRoleId = (int)UserRolesEnum.Patient;
-
-
-            // Create the user
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
-            {
-                // Define the path where the image will be stored
-                var folderPath = Path.Combine("wwwroot", "uploads", "profile_pictures");
-                user.ProfilePicture = await _fileHandler.UploadAsync(request.ProfilePicture, folderPath);
-            }
-
-            if (!result.Succeeded)
-                return _operationResultFactory.BadRequest<string>(result.Errors.Select(e => e.Description).ToList());
-
-            return _operationResultFactory.Created("Success!");
-        }
-
-        public async Task<OperationResultSingle<string>> CreateSecretaryAsync(CreateSecretaryRequest request)
-        {
-            var user = _mapper.Map<Secretary>(request);
-            user.AccountStatusId = (int)AccountStatusEnum.Active;
-            user.LastLogin = DateTime.Now;
-            user.ApplicationRoleId = (int)UserRolesEnum.Secretary;
-
-
-            // Create the user
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
-            {
-                // Define the path where the image will be stored
-                var folderPath = Path.Combine("wwwroot", "uploads", "profile_pictures");
-                user.ProfilePicture = await _fileHandler.UploadAsync(request.ProfilePicture, folderPath);
-            }
-
-            if (!result.Succeeded)
-                return _operationResultFactory.BadRequest<string>(result.Errors.Select(e => e.Description).ToList());
-
-            return _operationResultFactory.Created("Success!");
-        }
 
         public async Task<OperationResultSingle<AuthenticationResponse>> LoginAsync(LoginRequest request)
         {
             var authResult = new AuthenticationResponse();
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.Users
+                             .Include(u => u.Gender)
+                             .Include(u => u.Country)
+                             .Include(u => u.Governorate)
+                             .Include(u => u.District)
+                             .Include(u => u.AccountStatus)
+                             .Include(u => u.ApplicationRole)
+                             .FirstOrDefaultAsync(u => u.Email == request.EmailOrUsernameOrPhone
+                                                       || u.UserName == request.EmailOrUsernameOrPhone 
+                                                       || u.PhoneNumber == request.EmailOrUsernameOrPhone);
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 return _operationResultFactory.Unauthorized<AuthenticationResponse>();
@@ -113,6 +67,5 @@ namespace Application.Services.Authentication
 
             return _operationResultFactory.Success(authResult);
         }
-
     }
 }
