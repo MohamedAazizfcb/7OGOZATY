@@ -1,0 +1,42 @@
+﻿namespace Domain.Enums
+{
+    public enum SpecializationsEnum
+    {
+        Dentist=35,
+        GeneralPractitioner,
+        Cardiologist,
+        Dermatologist,
+        Neurologist,
+        Psychiatrist,
+        OrthopedicSurgeon,
+        Pediatrician,
+        Gynecologist,
+        Ophthalmologist,
+        ENT_Specialist,
+        Urologist,
+        Radiologist,
+        Oncologist,
+        Endocrinologist,
+        Gastroenterologist,
+        Pulmonologist,
+        Rheumatologist,
+        Anesthesiologist,
+        PlasticSurgeon,
+        Nephrologist,
+        Pathologist,
+        Hematologist,
+        Allergist,
+        Immunologist,
+        InfectiousDiseaseSpecialist,
+        Geriatrician,
+        SportsMedicineSpecialist,
+        CriticalCareSpecialist,
+        EmergencyMedicineSpecialist,
+        FamilyPhysician,
+        OccupationalTherapist,
+        Physiotherapist,
+        Dietitian,
+        Chiropractor
+    }
+
+}
