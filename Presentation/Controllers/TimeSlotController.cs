@@ -20,9 +20,15 @@ namespace Presentation.Controllers
             _timeSlotService = timeSlotService;
         }
 
+        [HttpPost("CreateTimeSlotsOfInterval")]
+        public async Task<IActionResult> CreateTimeSlotsOfInterval([FromBody] CreateTimeSlotsOfIntervalRequest req)
+        {
+            var result = await _timeSlotService.CreateTimeSlotsOfInterval(req);
+            return _responseFactory.CreateApiResponse(result);
+        }
 
-        [HttpPost("CreateNewTimeSlot")]
-        public async Task<IActionResult> CreateNewTimeSlot([FromBody] TimeSlotRequest req)
+        [HttpPost("CreateSingleTimeSlot")]
+        public async Task<IActionResult> CreateSingleTimeSlot([FromBody] TimeSlotRequest req)
         {
             var result = await _timeSlotService.CreateNewTimeSlot(req);
             return _responseFactory.CreateApiResponse(result);

@@ -32,23 +32,45 @@ namespace Application.Services
             _mapper = mapper;
         }
 
+        public async Task<OperationResultSingle<string>> CreateTimeSlotsOfInterval(CreateTimeSlotsOfIntervalRequest request)
+        {
+
+            var timeIntervalList = SplitTimeInterval(request.IntervalStartTime, request.IntervalEndTime, request.IntervalPeriod);
+            var singleRequestsList = new List<TimeSlotRequest>();
+            foreach (var timeInterval in timeIntervalList) {
+                var singleRequest = new TimeSlotRequest()
+                {
+                    Date = request.IntervalDate,
+                    DoctorId = request.DoctorId,
+                    StartTime = timeInterval.StartTime,
+                    EndTime = timeInterval.EndTime,
+                    TimeSlotStatusId = request.TimeSlotStatusId
+                };
+
+                if (await IsOverlapping(singleRequest))
+                {
+                    return _operationResultFactory.BadRequest<string>("There is an existing overlapping time slot.");
+                }
+
+                singleRequestsList.Add(singleRequest);
+            }
+
+            foreach (var singleRequest in singleRequestsList) { 
+                await CreateSingleSlot(singleRequest);
+            }
+
+            return _operationResultFactory.Success(singleRequestsList.Count.ToString() + " are created successfully!");
+        }
+
 
         public async Task<OperationResultSingle<string>> CreateNewTimeSlot(TimeSlotRequest request)
         {
-            var repository = _unitOfWork.GetRepository<TimeSlot>();
-
             if (await IsOverlapping(request))
             {
                 return _operationResultFactory.BadRequest<string>("There is an existing overlapping time slot.");
             }
 
-            // Map and add the new time slot
-
-            var slot = _mapper.Map<TimeSlot>(request);
-            await repository.AddAsync(slot);
-            await _unitOfWork.SaveAsync();
-
-            return _operationResultFactory.Success("Done")!;
+            return await CreateSingleSlot(request);
         }
 
         public async Task<OperationResultSingle<ICollection<TimeSlotResponse>>> GetAllAsync()
@@ -200,6 +222,44 @@ namespace Application.Services
                 return true;
             }
             return false;
+        }
+        private async Task<OperationResultSingle<string>> CreateSingleSlot(TimeSlotRequest request)
+        {
+            var repository = _unitOfWork.GetRepository<TimeSlot>();
+
+            // Map and add the new time slot
+
+            var slot = _mapper.Map<TimeSlot>(request);
+            await repository.AddAsync(slot);
+            await _unitOfWork.SaveAsync();
+
+            return _operationResultFactory.Success("Done")!;
+        }
+
+        private List<(TimeOnly StartTime, TimeOnly EndTime)> SplitTimeInterval(TimeOnly startTime, TimeOnly endTime, int intervalMinutes)
+        {
+            List<(TimeOnly StartTime, TimeOnly EndTime)> result = new List<(TimeOnly, TimeOnly)>();
+
+            TimeOnly currentStart = startTime;
+            while (currentStart < endTime)
+            {
+                // Calculate the end time for the current interval
+                TimeOnly currentEnd = currentStart.AddMinutes(intervalMinutes);
+
+                // Ensure that the end time does not go beyond the overall end time
+                if (currentEnd > endTime)
+                {
+                    currentEnd = endTime;
+                }
+
+                // Add the pair (currentStart, currentEnd) to the result list
+                result.Add((currentStart, currentEnd));
+
+                // Move the start time to the next interval
+                currentStart = currentEnd;
+            }
+
+            return result;
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Dtos.AppointmentDTO
+﻿namespace Application.Dtos.AppointmentDTO.Request
 {
     public class RescheduleAppointmentRequest
     {
-        public string SlotId { get; set; }
+        public int Id { get; set; }
+        public int TimeSlotId { get; set; }
+
     }
 }

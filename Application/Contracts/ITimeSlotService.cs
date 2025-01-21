@@ -7,6 +7,7 @@ namespace Application.Contracts
 {
     public interface ITimeSlotService
     {
+        Task<OperationResultSingle<string>> CreateTimeSlotsOfInterval(CreateTimeSlotsOfIntervalRequest request);
         Task<OperationResultSingle<string>> CreateNewTimeSlot(TimeSlotRequest request);
         Task<OperationResultSingle<string>> UpdateTimeSlotForDoctor(int timeSlotId, TimeSlotRequest request);
         Task<OperationResultSingle<string>> ChangeTimeSlotStatus(int timeSlotId, int newStatusId);

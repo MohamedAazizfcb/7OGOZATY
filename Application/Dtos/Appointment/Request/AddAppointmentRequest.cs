@@ -1,17 +1,17 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Dtos.AppointmentDTO
+﻿namespace Application.Dtos.AppointmentDTO.Request
 {
-    public class AddAppointmentRequest
+    public class CreateAppointmentRequest
     {
-        public string PatientId { get; set; }
-        public string DoctorId { get; set; }
-        public string SlotId { get; set; }
+        public string Notes { get; set; }
+
+        public int TimeSlotId { get; set; }
+
+        public int AppointmentStatusId { get; set; }
+
+        public int? ClinicId { get; set; }
+
+        public int DoctorId { get; set; }
+
+        public int PatientID { get; set; }
     }
 }

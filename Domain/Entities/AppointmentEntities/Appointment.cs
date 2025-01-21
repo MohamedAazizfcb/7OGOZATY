@@ -32,8 +32,8 @@ namespace Domain.Entities.AppointmentEntities
 
         public virtual ICollection<AppointmentServicesPivot>? AppointmentServicesPivots { get; set; } 
 
-        public int MedicalRecordEntryId { get; set; } // Foreign Key to Patient
-        public virtual MedicalRecordEntry MedicalRecordEntry { get; set; } = null!; // Navigation Property
+        public int? MedicalRecordEntryId { get; set; } // Foreign Key to Patient
+        public virtual MedicalRecordEntry? MedicalRecordEntry { get; set; } = null!; // Navigation Property
 
         // Feedbacks given on this appointment
         public virtual ICollection<Feedback>? Feedbacks { get; set; } 

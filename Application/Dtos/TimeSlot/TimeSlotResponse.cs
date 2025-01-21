@@ -8,8 +8,8 @@ namespace Application.Dtos.TimeSlot
     {
         public int Id { get; set; }
         public DateOnly Date { get; set; } // The specific date
-        public TimeSpan StartTime { get; set; } // The start time of the available slot
-        public TimeSpan EndTime { get; set; } // The end time of the available slot
+        public TimeOnly StartTime { get; set; } // The start time of the available slot
+        public TimeOnly EndTime { get; set; } // The end time of the available slot
         public int DoctorId { get; set; }
         public int TimeSlotStatusId { get; set; }
     }

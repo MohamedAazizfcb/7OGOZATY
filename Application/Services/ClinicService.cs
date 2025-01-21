@@ -8,10 +8,8 @@ using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Interfaces.UtilityInterfaces.FileHandlerInterfaces;
 using Domain.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Application.Services
