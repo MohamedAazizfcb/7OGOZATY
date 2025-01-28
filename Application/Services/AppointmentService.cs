@@ -1,9 +1,10 @@
 ﻿using Application.Contracts;
-using Application.Dtos.AppointmentDTO;
 using Application.Dtos.AppointmentDTO.Request;
+using Application.Dtos.AppointmentDTO.Response;
 using Application.Dtos.Clinic;
 using Application.Dtos.TimeSlot;
 using AutoMapper;
+using Azure.Core;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.ClinicEntity;
 using Domain.Entities.TimeSlotEntity;
@@ -37,17 +38,17 @@ namespace Application.Services
         {
             var repository = _unitOfWork.GetRepository<Appointment>();
             var appointment = _mapper.Map<Appointment>(request);
-            //var timeSlot = (await _timeSlotService.GetByIdAsync(appointment.TimeSlotId)).Data;
 
-            //if(timeSlot?.TimeSlotStatusId != (int)TimeSlotStatusEnum.Free)
-            //{
-            //    return _operationResultFactory.BadRequest<string>("Slot Not Free");
-            //}
+            if (! await IsTimeSlotFree(appointment.TimeSlotId))
+            {
+                return _operationResultFactory.BadRequest<string>("Slot Not Free");
+            }
 
             await repository.AddAsync(appointment);
             await _unitOfWork.SaveAsync();
+            await  _timeSlotService.ChangeTimeSlotStatus(appointment.TimeSlotId, (int)TimeSlotStatusEnum.Occupied);
 
-            return _operationResultFactory.Success("Done")!;
+            return _operationResultFactory.Success("Appointment #" + appointment.Id + " is created successfully!")!;
         }
 
         public async Task<OperationResultSingle<string>> DeleteAsync(int id)
@@ -58,6 +59,7 @@ namespace Application.Services
             {
                 await repository.DeleteAsync(entity);
                 await _unitOfWork.SaveAsync();
+                await _timeSlotService.ChangeTimeSlotStatus(entity.TimeSlotId, (int)TimeSlotStatusEnum.Cancelled);
                 return _operationResultFactory.Success("Done")!;
             }
             else
@@ -108,29 +110,97 @@ namespace Application.Services
             return _operationResultFactory.Success(mappedResult)!;
         }
 
-        public Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetDoctorAppointments(int docId)
+        public async Task<OperationResultSingle<string>> RescheduleAppointment(RescheduleSingleAppointmentRequest request)
+        {
+            if (!await IsTimeSlotFree(request.newTimeSlotId))
+            {
+                return _operationResultFactory.BadRequest<string>("Slot Not Free");
+            }
+            var repository = _unitOfWork.GetRepository<Appointment>();
+
+            var appointment = await repository.GetByIdAsync(request.appointmentId);
+            if (appointment == null) {
+                return _operationResultFactory.NotFound<string>("The provided ID doesn't match any record!");
+            }
+
+            appointment.TimeSlotId = request.newTimeSlotId;
+            await repository.UpdateAsync(appointment.Id, appointment);
+            await _unitOfWork.SaveAsync();
+
+            return _operationResultFactory.Success("Rescheduled Successfully!");
+        }
+
+        public Task<OperationResultSingle<string>> RescheduleDayOfAppointments(RescheduleDayOfAppointmentsRequest request)
         {
             throw new NotImplementedException();
         }
-
-        public Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetPatientAppointments(int patientId)
+        public async Task<OperationResultSingle<ICollection<AppointmentResponse>>> SearchForAppointments(SearchAppointmentsRequest request)
         {
-            throw new NotImplementedException();
+            var repository = _unitOfWork.GetRepository<Appointment>();
+            var result = await repository.GetAllAsync(include:
+                q => q
+                    .Include(a => a.Clinic)
+                    .Include(a => a.AppointmentStatus)
+                    .Include(a => a.AppointmentServicesPivots)
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Patient)
+                    .Include(a => a.Feedbacks)
+                    .Include(a => a.MedicalRecordEntry)
+                    .Include(a => a.TimeSlot)
+                ,
+                filter:
+                    a =>
+                        request.AppointmentId == null? true : a.Id == request.AppointmentId &&
+                        request.PatientID == null ? true : a.PatientID == request.PatientID &&
+                        request.AppointmentStatusId == null ? true : a.AppointmentStatusId == request.AppointmentStatusId &&
+                        request.AppointmentDate == null ? true : a.TimeSlot.Date == request.AppointmentDate &&
+                        request.PatientMobileNumber == null ? true : a.Patient.PhoneNumber == request.PatientMobileNumber &&
+                        request.ClinicId == null ? true : a.ClinicId == request.ClinicId &&
+                        request.PatientFirstName == null? true : (
+                            a.Patient.FirstName.Contains(request.PatientFirstName) 
+                            || request.PatientFirstName.Contains(a.Patient.FirstName)
+                        ) &&
+                        request.PatientLastName == null ? true : (
+                            a.Patient.LastName.Contains(request.PatientLastName)
+                            || request.PatientLastName.Contains(a.Patient.LastName)
+                        ) &&
+                        request.DoctortFirstName == null ? true : (
+                            a.Doctor.FirstName.Contains(request.DoctortFirstName)
+                            || request.DoctortFirstName.Contains(a.Doctor.FirstName)
+                        ) &&
+                        request.DoctorLastName == null ? true : (
+                            a.Doctor.LastName.Contains(request.DoctorLastName)
+                            || request.DoctorLastName.Contains(a.Doctor.LastName)
+                        )
+            );
+            var mappedResult = _mapper.Map<ICollection<AppointmentResponse>>(result);
+            return _operationResultFactory.Success(mappedResult)!;
+        }
+    
+        private async Task<bool> IsTimeSlotFree(int timeSlotId)
+        {
+            var timeSlot = (await _timeSlotService.GetByIdAsync(timeSlotId)).Data;
+
+            if (timeSlot?.TimeSlotStatusId != (int)TimeSlotStatusEnum.Free)
+            {
+                return false;
+            }
+            return true;
         }
 
-        public Task<OperationResultSingle<string>> RescheduleAppointment(int id, ClinicRequest request)
+        public async Task<OperationResultSingle<AppointmentResponse?>> ChangeAppointmentStatus(int appointmentId, int newStatusId)
         {
-            throw new NotImplementedException();
-        }
+            var repository = _unitOfWork.GetRepository<Appointment>();
 
-        public Task<OperationResultSingle<string>> RescheduleDayOfAppointments(int id, ClinicRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<OperationResultSingle<string>> UpdateAsync(int id, ClinicRequest request)
-        {
-            throw new NotImplementedException();
+            var appointment = await repository.GetByIdAsync(appointmentId);
+            if (appointment == null)
+            {
+                return _operationResultFactory.NotFound<AppointmentResponse?>("The provided ID doesn't match any record!");
+            }
+            appointment.AppointmentStatusId = newStatusId;
+            await repository.UpdateAsync(appointmentId, appointment);
+            await _unitOfWork.SaveAsync();
+            return _operationResultFactory.Success(_mapper.Map<AppointmentResponse?>(appointment));
         }
     }
 }

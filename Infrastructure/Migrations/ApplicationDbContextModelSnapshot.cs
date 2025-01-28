@@ -25,7 +25,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AppointmentStatusId")
                         .HasColumnType("int");
@@ -56,6 +59,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ClinicId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalRecordEntryId")
+                        .IsUnique();
 
                     b.HasIndex("PatientID");
 
@@ -882,9 +888,8 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", "MedicalRecordEntry")
                         .WithOne("Appointment")
-                        .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "MedicalRecordEntryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.User.Patient", "Patient")
                         .WithMany("Appointments")

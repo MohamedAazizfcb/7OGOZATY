@@ -1,11 +1,9 @@
 ﻿using Application.Dtos.TimeSlot;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.FeedbackEntity;
-using Domain.Entities.Lookups;
 using Domain.Entities.MedicalRecordEntities;
-using Domain.Entities.User;
 
-namespace Application.Dtos.AppointmentDTO
+namespace Application.Dtos.AppointmentDTO.Response
 {
     public class AppointmentResponse
     {

@@ -16,9 +16,9 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
                    .IsRequired(false); // Make notes optional
 
             builder.HasOne(a => a.TimeSlot) // One Appointment to one TimeSlot
-               .WithOne(ts => ts.Appointment) // TimeSlot can be linked to at most one Appointment
-               .HasForeignKey<Appointment>(a => a.TimeSlotId) // Foreign key property
-               .OnDelete(DeleteBehavior.Cascade); // Set TimeSlotId to null if the Appointment is deleted
+                   .WithOne(ts => ts.Appointment) // TimeSlot can be linked to at most one Appointment
+                   .HasForeignKey<Appointment>(a => a.TimeSlotId) // Foreign key property
+                   .OnDelete(DeleteBehavior.Cascade); // Set TimeSlotId to null if the Appointment is deleted
 
 
             builder.HasOne(a => a.AppointmentStatus)
@@ -46,12 +46,11 @@ namespace Infrastructure.Data.Configurations.AppointmentConf
                    .HasForeignKey(a => a.AppointmentId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-
-            builder.HasOne(e => e.MedicalRecordEntry)
-                  .WithOne(a => a.Appointment)
-                  .HasForeignKey<Appointment>(mr => mr.Id)
-                  .OnDelete(DeleteBehavior.Cascade); // Deleting a medical record deletes its entries
-
+            // Correct the relationship between Appointment and MedicalRecordEntry
+            builder.HasOne(a => a.MedicalRecordEntry)
+                   .WithOne(mr => mr.Appointment)
+                   .HasForeignKey<Appointment>(a => a.MedicalRecordEntryId) // Use the correct foreign key (MedicalRecordEntryId)
+                   .OnDelete(DeleteBehavior.SetNull); // Set to null if MedicalRecordEntry is deleted
 
             // Feedback for Appointment
             builder.HasMany(a => a.Feedbacks)  // An appointment can have multiple feedback entries

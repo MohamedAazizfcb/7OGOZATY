@@ -1,8 +1,6 @@
 ﻿using Application.Dtos.AppointmentDTO.Request;
-using Application.Dtos.AppointmentDTO;
+using Application.Dtos.AppointmentDTO.Response;
 using Application.Dtos.Clinic;
-using Domain.Entities.AppointmentEntities;
-using Domain.Entities.User;
 using Domain.Results;
 
 namespace Application.Contracts
@@ -11,15 +9,13 @@ namespace Application.Contracts
     {
         Task<OperationResultSingle<string>> CreateAsync(CreateAppointmentRequest request);
         Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetAll();
-        Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetDoctorAppointments(int docId);
-        Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetPatientAppointments(int patientId);
+        Task<OperationResultSingle<ICollection<AppointmentResponse>>> SearchForAppointments(SearchAppointmentsRequest request);
         Task<OperationResultSingle<AppointmentResponse>> GetById(int id);
 
+        Task<OperationResultSingle<string>> RescheduleAppointment(RescheduleSingleAppointmentRequest request);
+        Task<OperationResultSingle<string>> RescheduleDayOfAppointments(RescheduleDayOfAppointmentsRequest request);
 
-
-        Task<OperationResultSingle<string>> UpdateAsync(int id, ClinicRequest request);
-        Task<OperationResultSingle<string>> RescheduleAppointment(int id, ClinicRequest request);
-        Task<OperationResultSingle<string>> RescheduleDayOfAppointments(int id, ClinicRequest request);
+        Task<OperationResultSingle<AppointmentResponse?>> ChangeAppointmentStatus(int appointmentId, int newStatusId);
 
         Task<OperationResultSingle<string>> DeleteAsync(int id);
     }

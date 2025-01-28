@@ -1,20 +1,13 @@
 ﻿using Application.Contracts;
-using Application.Dtos.Clinic;
 using Application.Dtos.TimeSlot;
 using AutoMapper;
-using Azure.Core;
 using Domain.Entities.AppointmentEntities;
-using Domain.Entities.ClinicEntity;
 using Domain.Entities.TimeSlotEntity;
-using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
-using Domain.Interfaces.UtilityInterfaces.FileHandlerInterfaces;
 using Domain.Results;
-using Infrastructure.Utility.FileHandler;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
 namespace Application.Services
@@ -44,7 +37,7 @@ namespace Application.Services
                     DoctorId = request.DoctorId,
                     StartTime = timeInterval.StartTime,
                     EndTime = timeInterval.EndTime,
-                    TimeSlotStatusId = request.TimeSlotStatusId
+                    TimeSlotStatusId = (int)TimeSlotStatusEnum.Free
                 };
 
                 if (await IsOverlapping(singleRequest))

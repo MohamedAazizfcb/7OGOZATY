@@ -2,6 +2,8 @@
 using Application.Dtos.AppointmentDTO.Request;
 using Application.Dtos.Clinic;
 using Application.Services;
+using Domain.Entities.TimeSlotEntity;
+using Domain.Enums;
 using Domain.Interfaces.CommonInterfaces;
 using Domain.Permissions;
 using Domain.Permissions.PermissionsCategories;
@@ -33,7 +35,7 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
-        [HttpPut("deleteAppointment/{id}")]
+        [HttpDelete("deleteAppointment/{id}")]
         public async Task<IActionResult> DeleteAppointment([FromRoute] int id)
         {
             var result = await _appointmentService.DeleteAsync(id);
@@ -54,25 +56,49 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
-        //[HttpGet("getClinicDoctors/{id}")]
-        //public async Task<IActionResult> GetClinicDoctors([FromRoute] int id)
-        //{
-        //    var result = await _appointmentService.GetClinicDoctors(id);
-        //    return _responseFactory.CreateApiResponse(result);
-        //}
+        [HttpPost("rescheduleSingleAppointment")]
+        public async Task<IActionResult> RescheduleSingleAppointment([FromBody] RescheduleSingleAppointmentRequest request)
+        {
+            var result = await _appointmentService.RescheduleAppointment(request);
+            return _responseFactory.CreateApiResponse(result);
+        }
 
-        //[HttpGet("getClinicAppointments/{id}")]
-        //public async Task<IActionResult> GetClinicAppointments([FromRoute] int id)
-        //{
-        //    var result = await _appointmentService.GetClinicAppointments(id);
-        //    return _responseFactory.CreateApiResponse(result);
-        //}
 
-        //[HttpDelete("deleteClinic/{id}")]
-        //public async Task<IActionResult> DeleteClinic([FromRoute] int id)
-        //{
-        //    var result = await _appointmentService.DeleteAsync(id);
-        //    return _responseFactory.CreateApiResponse(result);
-        //}
+        [HttpPost("rescheduleDayOfAppointment")]
+        public async Task<IActionResult> RescheduleDayOfAppointment([FromBody] RescheduleDayOfAppointmentsRequest request)
+        {
+            var result = await _appointmentService.RescheduleDayOfAppointments(request);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+
+        [HttpPut("apporoveAppointment/{id}")]
+        public async Task<IActionResult> ApproveAppointment([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Accepted);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPut("rejectAppointment/{id}")]
+        public async Task<IActionResult> RejectAppointment([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Rejected);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPut("cancelAppointment/{id}")]
+        public async Task<IActionResult> CancelAppointment([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Cancelled);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+
+        [HttpPost("SearchForAppointmentsByOptionalParams")]
+        public async Task<IActionResult> SearchForAppointments([FromBody] SearchAppointmentsRequest request)
+        {
+            var result = await _appointmentService.SearchForAppointments(request);
+            return _responseFactory.CreateApiResponse(result);
+        }
     }
 }

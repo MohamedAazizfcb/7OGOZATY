@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241218190401_admin")]
-    partial class admin
+    [Migration("20250122092832_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.AppointmentEntities.Appointment", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AppointmentStatusId")
                         .HasColumnType("int");
@@ -39,7 +42,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MedicalRecordEntryId")
+                    b.Property<int?>("MedicalRecordEntryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
@@ -59,6 +62,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ClinicId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalRecordEntryId")
+                        .IsUnique();
 
                     b.HasIndex("PatientID");
 
@@ -412,10 +418,10 @@ namespace Infrastructure.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("EndTime")
+                    b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time(6)");
 
-                    b.Property<TimeSpan>("StartTime")
+                    b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time(6)");
 
                     b.Property<int>("TimeSlotStatusId")
@@ -511,8 +517,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -830,7 +836,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<int>("MedicalRecordId")
+                    b.Property<int?>("MedicalRecordId")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
@@ -885,9 +891,8 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecordEntry", "MedicalRecordEntry")
                         .WithOne("Appointment")
-                        .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Domain.Entities.AppointmentEntities.Appointment", "MedicalRecordEntryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.User.Patient", "Patient")
                         .WithMany("Appointments")
@@ -1211,8 +1216,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.MedicalRecordEntities.MedicalRecord", "MedicalRecord")
                         .WithOne("Patient")
                         .HasForeignKey("Domain.Entities.User.Patient", "MedicalRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.InsuranceProviderEntities.UserInsuranceProvider", "InsuranceProvider")
                         .WithMany("Patients")

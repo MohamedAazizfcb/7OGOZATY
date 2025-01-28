@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class NewConfig : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -241,8 +241,8 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ProfilePicture = table.Column<string>(type: "longtext", nullable: false)
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     GenderId = table.Column<int>(type: "int", nullable: false),
@@ -367,28 +367,23 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "BaseGallery",
+                name: "ClinicGallery",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ImageUrl = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ImageDescription = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Discriminator = table.Column<string>(type: "varchar(13)", maxLength: 13, nullable: false)
+                    imgUrl = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClinicId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaseGallery", x => x.Id);
+                    table.PrimaryKey("PK_ClinicGallery", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseGallery_Clinic_ClinicId",
+                        name: "FK_ClinicGallery_Clinic_ClinicId",
                         column: x => x.ClinicId,
                         principalTable: "Clinic",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -551,8 +546,8 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
+                    StartTime = table.Column<TimeOnly>(type: "time(6)", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time(6)", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
                     TimeSlotStatusId = table.Column<int>(type: "int", nullable: false),
                     AppointmentId = table.Column<int>(type: "int", nullable: true)
@@ -579,7 +574,8 @@ namespace Infrastructure.Migrations
                 name: "Appointment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TimeSlotId = table.Column<int>(type: "int", nullable: false),
@@ -587,7 +583,7 @@ namespace Infrastructure.Migrations
                     ClinicId = table.Column<int>(type: "int", nullable: true),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
                     PatientID = table.Column<int>(type: "int", nullable: false),
-                    MedicalRecordEntryId = table.Column<int>(type: "int", nullable: false)
+                    MedicalRecordEntryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -617,11 +613,11 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointment_MedicalRecordEntry_Id",
-                        column: x => x.Id,
+                        name: "FK_Appointment_MedicalRecordEntry_MedicalRecordEntryId",
+                        column: x => x.MedicalRecordEntryId,
                         principalTable: "MedicalRecordEntry",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Appointment_TimeSlot_TimeSlotId",
                         column: x => x.TimeSlotId,
@@ -707,6 +703,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Appointment_DoctorId",
                 table: "Appointment",
                 column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_MedicalRecordEntryId",
+                table: "Appointment",
+                column: "MedicalRecordEntryId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointment_PatientID",
@@ -818,11 +820,6 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BaseGallery_ClinicId",
-                table: "BaseGallery",
-                column: "ClinicId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Clinic_CountryId",
                 table: "Clinic",
                 column: "CountryId");
@@ -836,6 +833,11 @@ namespace Infrastructure.Migrations
                 name: "IX_Clinic_GovernorateId",
                 table: "Clinic",
                 column: "GovernorateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClinicGallery_ClinicId",
+                table: "ClinicGallery",
+                column: "ClinicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DoctorCertificate_DoctorId",
@@ -915,7 +917,7 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BaseGallery");
+                name: "ClinicGallery");
 
             migrationBuilder.DropTable(
                 name: "DoctorCertificate");
