@@ -1,6 +1,6 @@
-﻿using Application.Dtos.AppointmentDTO.Request;
+﻿using Application.AppointmentDTO.Request;
+using Application.Dtos.AppointmentDTO.Request;
 using Application.Dtos.AppointmentDTO.Response;
-using Application.Dtos.Clinic;
 using Domain.Results;
 
 namespace Application.Contracts
@@ -18,5 +18,12 @@ namespace Application.Contracts
         Task<OperationResultSingle<AppointmentResponse?>> ChangeAppointmentStatus(int appointmentId, int newStatusId);
 
         Task<OperationResultSingle<string>> DeleteAsync(int id);
+        Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetPendingAppointmentsOfDoctor(int docId);
+        Task<OperationResultSingle<string>> AddServiceForAppointment(AddServiceForAppointmentRequest request);
+        Task<OperationResultSingle<ICollection<AppointmentServicesResponse>>> GetAppointmentServices(int appointmentId);
+
+
+
+
     }
 }

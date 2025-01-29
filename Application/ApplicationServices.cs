@@ -43,7 +43,9 @@ namespace Application
             services.AddScoped<IClinicService, ClinicService>();
             services.AddScoped<ITimeSlotService, TimeSlotService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ISpecializationServicesService, SpecializationServicesService>();
 
+            
 
             // Register strategies as scoped services
             services.AddScoped<ICreateNewUserStrategy, CreateNewAdminStrategy>();

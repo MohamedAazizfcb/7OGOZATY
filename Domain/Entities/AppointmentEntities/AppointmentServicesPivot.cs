@@ -5,6 +5,7 @@ namespace Domain.Entities.AppointmentEntities
 {
     public class AppointmentServicesPivot
     {
+        public int SingleServicePriceForAppointment { get; set; }
 
         // Foreign Keys
         public int ServiceId { get; set; }

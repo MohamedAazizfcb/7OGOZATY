@@ -1,4 +1,5 @@
-﻿using Application.Contracts;
+﻿using Application.AppointmentDTO.Request;
+using Application.Contracts;
 using Application.Dtos.AppointmentDTO.Request;
 using Application.Dtos.Clinic;
 using Application.Services;
@@ -100,5 +101,28 @@ namespace Presentation.Controllers
             var result = await _appointmentService.SearchForAppointments(request);
             return _responseFactory.CreateApiResponse(result);
         }
+
+
+        [HttpPost("addServiceForAppointment")]
+        public async Task<IActionResult> addServicesForAppointment([FromRoute] AddServiceForAppointmentRequest req)
+        {
+            var result = await _appointmentService.AddServiceForAppointment(req);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpGet("getPendingAppointmentsOfDoctor/{docId}")]
+        public async Task<IActionResult> GetPendingAppointmentsOfDoctor([FromRoute] int docId)
+        {
+            var result = await _appointmentService.GetPendingAppointmentsOfDoctor(docId);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpGet("getAppointmentServices/{appointmentId}")]
+        public async Task<IActionResult> GetAppointmentServices([FromRoute] int appointmentId)
+        {
+            var result = await _appointmentService.GetAppointmentServices(appointmentId);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
     }
 }

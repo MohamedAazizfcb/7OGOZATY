@@ -1,7 +1,5 @@
-﻿using Domain.Entities.ClinicEntity;
+﻿using Domain.Entities.AppointmentEntities;
 using Domain.Entities.User;
-using Domain.Entities.AppointmentEntities;
-using Domain.Entities.Lookups;
 
 namespace Application.Dtos.Clinic
 {

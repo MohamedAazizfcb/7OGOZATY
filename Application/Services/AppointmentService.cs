@@ -1,7 +1,10 @@
-﻿using Application.Contracts;
+﻿
+using Application.AppointmentDTO.Request;
+using Application.Contracts;
 using Application.Dtos.AppointmentDTO.Request;
 using Application.Dtos.AppointmentDTO.Response;
 using Application.Dtos.Clinic;
+using Application.Dtos.SpecializationServices.Response;
 using Application.Dtos.TimeSlot;
 using AutoMapper;
 using Azure.Core;
@@ -201,6 +204,64 @@ namespace Application.Services
             await repository.UpdateAsync(appointmentId, appointment);
             await _unitOfWork.SaveAsync();
             return _operationResultFactory.Success(_mapper.Map<AppointmentResponse?>(appointment));
+        }
+
+        public async Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetPendingAppointmentsOfDoctor(int docId)
+        {
+            var repository = _unitOfWork.GetRepository<Appointment>();
+            var result = await repository.GetAllAsync(include:
+                q => q
+                    .Include(a => a.Clinic)
+                    .Include(a => a.AppointmentStatus)
+                    .Include(a => a.AppointmentServicesPivots)
+                    .Include(a => a.Doctor)
+                    .Include(a => a.Patient)
+                    .Include(a => a.Feedbacks)
+                    .Include(a => a.MedicalRecordEntry)
+                    .Include(a => a.TimeSlot)
+                    ,
+                filter: 
+                    a => a.Doctor.Id == docId && 
+                         a.AppointmentStatus.Id == (int)AppointmentStatusEnum.Pending
+
+            );
+
+            var mappedResult = _mapper.Map<ICollection<AppointmentResponse>>(result);
+            return _operationResultFactory.Success(mappedResult)!;
+        }
+
+        public async Task<OperationResultSingle<string>> AddServiceForAppointment(AddServiceForAppointmentRequest request)
+        {
+            var repository = _unitOfWork.GetRepository<AppointmentServicesPivot>();
+            var ASP = new AppointmentServicesPivot()
+            {
+                ServiceId = request.ServieId,
+                AppointmentId = request.AppointmentId,
+                SingleServicePriceForAppointment = request.Price
+            };
+
+            await repository.AddAsync(ASP);
+            await _unitOfWork.SaveAsync();
+
+            return _operationResultFactory.Success("Done!")!;
+        }
+
+        public async Task<OperationResultSingle<ICollection<AppointmentServicesResponse>>> GetAppointmentServices(int appointmentId)
+        {
+            var repository = _unitOfWork.GetRepository<AppointmentServicesPivot>();
+            var result = await repository.GetAllAsync(include:
+                    q => q
+                        .Include(a => a.Service)
+                        ,
+                    filter:
+                        a => a.AppointmentId == appointmentId
+            );
+            if (result == null)
+            {
+                return _operationResultFactory.NotFound<ICollection<AppointmentServicesResponse>>("The provided ID doesn't match any record!");
+            }
+            var mappedResult = _mapper.Map<ICollection<AppointmentServicesResponse>>(result);
+            return _operationResultFactory.Success(mappedResult)!;
         }
     }
 }

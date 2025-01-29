@@ -38,7 +38,8 @@ namespace Application.Services
             await repository.AddAsync(service);
             await _unitOfWork.SaveAsync();
 
-            return _operationResultFactory.Success("Service " + service.ServiceName + " is created successfully!")        }
+            return _operationResultFactory.Success("Service " + service.ServiceName + " is created successfully!");                    
+        }
 
         public async Task<OperationResultSingle<string>> DeleteAsync(int id)
         {
@@ -77,14 +78,16 @@ namespace Application.Services
             return _operationResultFactory.Success(mappedResult)!;
         }
 
-        public Task<OperationResultSingle<ICollection<Appointment>>> GetSpecializationAppointments(int specializationId)
+        public async Task<OperationResultSingle<ICollection<SpecializationServiceResponse>>> GetServiceBySpecializationId(int specializationid)
         {
-            throw new NotImplementedException();
-        }
+            var repository = _unitOfWork.GetRepository<SpecializationService>();
+            var result = await repository.GetAllAsync(
+                filter:
+                    s => s.SpecializationId == specializationid
+            );
 
-        public Task<OperationResultSingle<ICollection<Doctor>>> GetSpecializationDoctors(int specializationId)
-        {
-            throw new NotImplementedException();
+            var mappedResult = _mapper.Map<ICollection<SpecializationServiceResponse>>(result);
+            return _operationResultFactory.Success(mappedResult)!;
         }
 
         public async Task<OperationResultSingle<string>> UpdateAsync(int id, SpecializationServiceRequest request)

@@ -7,14 +7,10 @@ namespace Application.Dtos.SpecializationServices.Response
     public class SpecializationServiceResponse
     {
         public int Id { get; set; }
-        public string ServiceName { get; set; }
         public string ServiceDescription { get; set; }
         public int AvgDurationInMinutes { get; set; }
-
-
         // Foreign Keys
         public int SpecializationId { get; set; }
-        public string SpecializationNameEn { get; set; }
-        public string SpecializationNameAr { get; set; }
+        public string ServiceName { get; set; }
     }
 }
