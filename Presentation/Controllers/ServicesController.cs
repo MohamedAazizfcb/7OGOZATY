@@ -30,7 +30,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("createService")]
-        public async Task<IActionResult> createService([FromForm] SpecializationServiceRequest req)
+        public async Task<IActionResult> createService([FromBody] SpecializationServiceRequest req)
         {
             var result = await _specializationServicesService.CreateAsync(req);
             return _responseFactory.CreateApiResponse(result);

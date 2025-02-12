@@ -1,4 +1,5 @@
-﻿using Application.Dtos.SpecializationServices.Request;
+﻿using Application.Dtos.DoctorDTO.Response;
+using Application.Dtos.SpecializationServices.Request;
 using Application.Dtos.SpecializationServices.Response;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.Lookups;
@@ -15,5 +16,6 @@ namespace Application.Contracts
         Task<OperationResultSingle<string>> UpdateAsync(int id, SpecializationServiceRequest request);
         Task<OperationResultSingle<string>> DeleteAsync(int id);
         Task<OperationResultSingle<ICollection<SpecializationServiceResponse>>> GetServiceBySpecializationId(int specializationid);
+
     }
 }

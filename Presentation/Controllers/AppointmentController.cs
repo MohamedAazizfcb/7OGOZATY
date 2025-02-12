@@ -104,7 +104,7 @@ namespace Presentation.Controllers
 
 
         [HttpPost("addServiceForAppointment")]
-        public async Task<IActionResult> addServicesForAppointment([FromRoute] AddServiceForAppointmentRequest req)
+        public async Task<IActionResult> addServicesForAppointment([FromBody] AddServiceForAppointmentRequest req)
         {
             var result = await _appointmentService.AddServiceForAppointment(req);
             return _responseFactory.CreateApiResponse(result);

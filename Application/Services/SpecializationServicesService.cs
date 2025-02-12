@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Dtos.AppointmentDTO.Response;
+using Application.Dtos.DoctorDTO.Response;
 using Application.Dtos.SpecializationServices.Request;
 using Application.Dtos.SpecializationServices.Response;
 using AutoMapper;

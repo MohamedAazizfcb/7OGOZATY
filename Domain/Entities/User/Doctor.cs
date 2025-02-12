@@ -12,6 +12,7 @@ namespace Domain.Entities.User
     {
         public string Brief { get; set; }
 
+        public int CheckPrice { get; set; }
         public int? ClinicId { get; set; }
         public virtual Clinic? Clinic { get; set; }
 
