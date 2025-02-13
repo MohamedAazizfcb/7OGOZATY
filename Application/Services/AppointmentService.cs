@@ -222,7 +222,7 @@ namespace Application.Services
                     ,
                 filter: 
                     a => a.Doctor.Id == docId && 
-                         a.AppointmentStatus.Id == (int)AppointmentStatusEnum.Pending
+                         a.AppointmentStatus.Id == (int)AppointmentStatusEnum.UpComing
 
             );
 

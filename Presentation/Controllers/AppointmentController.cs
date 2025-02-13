@@ -73,19 +73,20 @@ namespace Presentation.Controllers
         }
 
 
-        [HttpPut("apporoveAppointment/{id}")]
-        public async Task<IActionResult> ApproveAppointment([FromRoute] int id)
-        {
-            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Accepted);
-            return _responseFactory.CreateApiResponse(result);
-        }
+        //[HttpPut("apporoveAppointment/{id}")]
+        //public async Task<IActionResult> ApproveAppointment([FromRoute] int id)
+        //{
+        //    var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Accepted);
+        //    return _responseFactory.CreateApiResponse(result);
+        //}
 
-        [HttpPut("rejectAppointment/{id}")]
-        public async Task<IActionResult> RejectAppointment([FromRoute] int id)
-        {
-            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Rejected);
-            return _responseFactory.CreateApiResponse(result);
-        }
+        //[HttpPut("rejectAppointment/{id}")]
+        //public async Task<IActionResult> RejectAppointment([FromRoute] int id)
+        //{
+        //    var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Rejected);
+        //    return _responseFactory.CreateApiResponse(result);
+        //}
+
 
         [HttpPut("cancelAppointment/{id}")]
         public async Task<IActionResult> CancelAppointment([FromRoute] int id)
