@@ -1,4 +1,6 @@
 ﻿using Application.Dtos.TimeSlot;
+using Application.Dtos.TimeSlot.Request;
+using Application.Dtos.TimeSlot.Response;
 using AutoMapper;
 using Domain.Entities.TimeSlotEntity;
 

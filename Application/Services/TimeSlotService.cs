@@ -1,5 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Dtos.TimeSlot;
+using Application.Dtos.TimeSlot.Request;
+using Application.Dtos.TimeSlot.Response;
 using AutoMapper;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.TimeSlotEntity;
@@ -8,6 +10,7 @@ using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Results;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Expressions;
 
 namespace Application.Services
@@ -189,6 +192,39 @@ namespace Application.Services
             return _operationResultFactory.Success(result.Appointment)!;
         }
 
+        public async Task<OperationResultSingle<WorkingDaysOfDoctorResponse>> GetWorkingDaysOfDoctor(WorkingDaysOfDoctorRequest request)
+        {
+            var repository = _unitOfWork.GetRepository<TimeSlot>();
+            DateTime currentDate = DateTime.Now;
+            DateOnly maxDate = DateOnly.FromDateTime(currentDate.AddDays(request.NumberOfRequiredDays));
+            DateOnly minDate = DateOnly.FromDateTime(currentDate);
+
+            var result = await repository.GetAllAsync(
+                filter:
+            t =>
+                    t.DoctorId == request.DocId &&
+                    t.Date >= minDate &&
+                    t.Date <= maxDate
+                ,
+                orderBy:
+                    q => q
+                        .OrderBy(t => t.Date)                
+            );
+
+            if (result != null)
+            {
+
+                var mappedResult = new WorkingDaysOfDoctorResponse()
+                {
+                    WorkingDays = result.Select(p => p.Date).Distinct().ToList()
+                };
+                return _operationResultFactory.Success(mappedResult)!;
+            }
+            return _operationResultFactory.Success(new WorkingDaysOfDoctorResponse()
+            {
+                WorkingDays= new List<DateOnly>() 
+            });
+        }
 
         private async Task<bool> IsOverlapping(TimeSlotRequest request, int? SlotToUpdateId = null!)
         {
@@ -254,5 +290,7 @@ namespace Application.Services
 
             return result;
         }
+
+
     }
 }

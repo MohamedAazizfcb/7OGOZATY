@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.TimeSlot
+﻿namespace Application.Dtos.TimeSlot.Request
 {
     public class TimeSlotRequest
     {

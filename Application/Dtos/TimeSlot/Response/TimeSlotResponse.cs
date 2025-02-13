@@ -2,7 +2,7 @@
 using Domain.Entities.Lookups;
 using Domain.Entities.User;
 
-namespace Application.Dtos.TimeSlot
+namespace Application.Dtos.TimeSlot.Response
 {
     public class TimeSlotResponse
     {

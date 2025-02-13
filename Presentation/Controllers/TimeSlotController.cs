@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Dtos.TimeSlot;
+using Application.Dtos.TimeSlot.Request;
 using Domain.Interfaces.CommonInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +68,12 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
+        [HttpPost("GetWorkingDaysOfDoctor")]
+        public async Task<IActionResult> GetWorkingDaysOfDoctor([FromBody] WorkingDaysOfDoctorRequest request)
+        {
+            var result = await _timeSlotService.GetWorkingDaysOfDoctor(request);
+            return _responseFactory.CreateApiResponse(result);
+        }
 
         [HttpGet("GetSlotAppointment/{timeSlotId}")]
         public async Task<IActionResult> GetSlotAppointment([FromRoute] int timeSlotId)

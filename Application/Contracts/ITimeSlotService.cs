@@ -1,4 +1,6 @@
 ﻿using Application.Dtos.TimeSlot;
+using Application.Dtos.TimeSlot.Request;
+using Application.Dtos.TimeSlot.Response;
 using Domain.Entities.AppointmentEntities;
 using Domain.Enums;
 using Domain.Results;
@@ -15,5 +17,7 @@ namespace Application.Contracts
         Task<OperationResultSingle<ICollection<TimeSlotResponse>>> GetAllAsync();
         Task<OperationResultSingle<ICollection<TimeSlotResponse>>> GetDectorTimeSlots(GetDoctorTimeSlostRequest request);
         Task<OperationResultSingle<Appointment>> GetSlotAppointment(int timeSlotId);
+        Task<OperationResultSingle<WorkingDaysOfDoctorResponse>> GetWorkingDaysOfDoctor(WorkingDaysOfDoctorRequest request);
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.Dtos.TimeSlot;
+﻿using Application.Dtos.TimeSlot.Response;
 using Domain.Entities.AppointmentEntities;
 using Domain.Entities.FeedbackEntity;
 using Domain.Entities.MedicalRecordEntities;
