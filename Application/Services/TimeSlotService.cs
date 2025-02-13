@@ -30,32 +30,40 @@ namespace Application.Services
 
         public async Task<OperationResultSingle<string>> CreateTimeSlotsOfInterval(CreateTimeSlotsOfIntervalRequest request)
         {
-
-            var timeIntervalList = SplitTimeInterval(request.IntervalStartTime, request.IntervalEndTime, request.IntervalPeriod);
+            if(request.IntervalDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                return _operationResultFactory.BadRequest<string>("Cannot create slots for older dates.");
+            }
+            var timeIntervalList = SplitTimeInterval(request.IntervalStartTime, request.IntervalEndTime, request.IntervalPeriodInMinutes);
             var singleRequestsList = new List<TimeSlotRequest>();
-            foreach (var timeInterval in timeIntervalList) {
-                var singleRequest = new TimeSlotRequest()
-                {
-                    Date = request.IntervalDate,
-                    DoctorId = request.DoctorId,
-                    StartTime = timeInterval.StartTime,
-                    EndTime = timeInterval.EndTime,
-                    TimeSlotStatusId = (int)TimeSlotStatusEnum.Free
-                };
+            for (var i = 0; i < request.NumberOfWeeksToRepeat; i++)
+            {
+                DateOnly date = DateOnly.FromDateTime(request.IntervalDate.ToDateTime(TimeOnly.MinValue).AddDays(i * 7));
+                foreach (var timeInterval in timeIntervalList) {
+                    var singleRequest = new TimeSlotRequest()
+                    {
+                        Date = date,
+                        DoctorId = request.DoctorId,
+                        StartTime = timeInterval.StartTime,
+                        EndTime = timeInterval.EndTime,
+                        TimeSlotStatusId = (int)TimeSlotStatusEnum.Free
+                    };
 
-                if (await IsOverlapping(singleRequest))
-                {
-                    return _operationResultFactory.BadRequest<string>("There is an existing overlapping time slot.");
+                    if (await IsOverlapping(singleRequest))
+                    {
+                        return _operationResultFactory.BadRequest<string>("There is an existing overlapping time slot.");
+                    }
+
+                    singleRequestsList.Add(singleRequest);
                 }
-
-                singleRequestsList.Add(singleRequest);
+          
             }
 
             foreach (var singleRequest in singleRequestsList) { 
                 await CreateSingleSlot(singleRequest);
             }
 
-            return _operationResultFactory.Success(singleRequestsList.Count.ToString() + " are created successfully!");
+            return _operationResultFactory.Success(singleRequestsList.Count.ToString() + " slots are created successfully!");
         }
 
 
