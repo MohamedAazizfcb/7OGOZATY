@@ -79,6 +79,7 @@ namespace Application.Services
                 a => a.AppointmentStatus,
                 a => a.AppointmentServicesPivots,
                 a => a.Doctor,
+                a => a.Doctor.Specialization,
                 a => a.Patient,
                 a => a.Feedbacks,
                 a => a.MedicalRecordEntry,
@@ -103,6 +104,7 @@ namespace Application.Services
                     .Include(a => a.AppointmentStatus)
                     .Include(a => a.AppointmentServicesPivots)
                     .Include(a => a.Doctor)
+                    .Include(a => a.Doctor.Specialization)
                     .Include(a => a.Patient)
                     .Include(a => a.Feedbacks)
                     .Include(a => a.MedicalRecordEntry)
@@ -146,6 +148,7 @@ namespace Application.Services
                     .Include(a => a.AppointmentStatus)
                     .Include(a => a.AppointmentServicesPivots)
                     .Include(a => a.Doctor)
+                    .Include(a => a.Doctor.Specialization)
                     .Include(a => a.Patient)
                     .Include(a => a.Feedbacks)
                     .Include(a => a.MedicalRecordEntry)
@@ -215,6 +218,7 @@ namespace Application.Services
                     .Include(a => a.AppointmentStatus)
                     .Include(a => a.AppointmentServicesPivots)
                     .Include(a => a.Doctor)
+                    .Include(a => a.Doctor.Specialization)
                     .Include(a => a.Patient)
                     .Include(a => a.Feedbacks)
                     .Include(a => a.MedicalRecordEntry)
