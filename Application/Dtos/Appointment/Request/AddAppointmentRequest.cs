@@ -6,8 +6,6 @@
 
         public int TimeSlotId { get; set; }
 
-        public int AppointmentStatusId { get; set; }
-
         public int? ClinicId { get; set; }
 
         public int DoctorId { get; set; }

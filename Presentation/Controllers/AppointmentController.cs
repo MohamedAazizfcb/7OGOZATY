@@ -30,7 +30,7 @@ namespace Presentation.Controllers
 
 
         [HttpPost("createAppointment")]
-        public async Task<IActionResult> CreateAppointment([FromForm] CreateAppointmentRequest req)
+        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequest req)
         {
             var result = await _appointmentService.CreateAsync(req);
             return _responseFactory.CreateApiResponse(result);

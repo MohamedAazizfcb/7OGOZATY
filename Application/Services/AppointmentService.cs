@@ -41,7 +41,7 @@ namespace Application.Services
         {
             var repository = _unitOfWork.GetRepository<Appointment>();
             var appointment = _mapper.Map<Appointment>(request);
-
+            appointment.AppointmentStatusId = (int)AppointmentStatusEnum.UpComing;
             if (! await IsTimeSlotFree(appointment.TimeSlotId))
             {
                 return _operationResultFactory.BadRequest<string>("Slot Not Free");
