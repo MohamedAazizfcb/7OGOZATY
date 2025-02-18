@@ -2,6 +2,7 @@
 using Application.Contracts;
 using Application.Dtos.AppointmentDTO.Request;
 using Application.Dtos.DoctorDTO.Request;
+using Application.Dtos.DoctorDTO.Response;
 using Domain.Enums;
 using Domain.Interfaces.CommonInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +56,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetDoctorsByOptionalParams([FromBody] GetDoctorsByFilterRequest request)
         {
             var result = await _doctorService.GetDoctorsByOptionalParams(request);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPost("getDoctorDayAppointmentsCount")]
+        public async Task<IActionResult> GetDoctorDayAppointmentsCount([FromBody] DoctorDayAppointmentsCountRequest request)
+        {
+            var result = await _doctorService.GetDoctorDayAppointmentsCount(request);
             return _responseFactory.CreateApiResponse(result);
         }
     }

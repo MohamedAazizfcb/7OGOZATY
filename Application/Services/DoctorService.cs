@@ -13,7 +13,6 @@ using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
 using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Results;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services
 {
@@ -69,6 +68,32 @@ namespace Application.Services
                 TotalDayRevenue = totalRevenue
             };
             return _operationResultFactory.Success(mappedResult)!;
+        }
+
+        public async Task<OperationResultSingle<DoctorDayAppointmentsCountResponse>> GetDoctorDayAppointmentsCount(DoctorDayAppointmentsCountRequest request)
+        {
+            var repository = _unitOfWork.GetRepository<Doctor>();
+            var result = await repository.GetAllAsync(include:
+                q => q
+                    .Include(u => u.Appointments),
+                filter:
+                    a =>
+                        request.DocId == null ? true : request.DocId == a.Id
+            );
+            if (result.Any())
+            {
+                var appointments = result.ToList()[0].Appointments;
+                var mappedResult = new DoctorDayAppointmentsCountResponse()
+                {
+                    UpcominAppointmentsCount = appointments.Count(a => a.AppointmentStatusId == (int)AppointmentStatusEnum.UpComing),
+                    CancelledAppointmentsCount = appointments.Count(a => a.AppointmentStatusId == (int)AppointmentStatusEnum.Cancelled),
+                    CompletedAppointmentsCount = appointments.Count(a => a.AppointmentStatusId == (int)AppointmentStatusEnum.Done),
+                };
+                return _operationResultFactory.Success(mappedResult)!;
+            }
+            else {
+                return _operationResultFactory.NotFound<DoctorDayAppointmentsCountResponse>("Invalid Doctor ID");
+            }
         }
 
         public async Task<OperationResultSingle<ICollection<DoctorResponse>>> GetDoctorsByOptionalParams(GetDoctorsByFilterRequest request)

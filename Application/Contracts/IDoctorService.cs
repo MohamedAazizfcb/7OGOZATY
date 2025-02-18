@@ -15,7 +15,7 @@ namespace Application.Contracts
         Task<OperationResultSingle<ICollection<DoctorResponse>>> GetDoctorsBySpecializationId(int specializationid);
         Task<OperationResultSingle<ICollection<DoctorResponse>>> GetOverallTopTenRatedDoctors();
         Task<OperationResultSingle<ICollection<DoctorResponse>>> GetDoctorsByOptionalParams(GetDoctorsByFilterRequest request);
-
+        Task<OperationResultSingle<DoctorDayAppointmentsCountResponse>> GetDoctorDayAppointmentsCount(DoctorDayAppointmentsCountRequest request);
 
     }
 }
