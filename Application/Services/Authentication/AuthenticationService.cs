@@ -33,7 +33,7 @@ namespace Application.Services.Authentication
         private readonly IUnitOfWork _unitOfWork;
 
         public AuthentictionService(UserManager<ApplicationUser> userManager, IJwtTokenService jwtTokenService, IMapper mapper, 
-            IOperationResultFactory operationResultFactory, IFileHandler fileHandler, IUnitOfWork unitOfWork
+            IOperationResultFactory operationResultFactory, IFileHandler fileHandler, IUnitOfWork unitOfWork,
             CreateNewUserStrategyFactory createNewUserStrategyFactory)
         {
             _userManager = userManager;

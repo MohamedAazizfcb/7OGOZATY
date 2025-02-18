@@ -267,5 +267,10 @@ namespace Application.Services
             var mappedResult = _mapper.Map<ICollection<AppointmentServicesResponse>>(result);
             return _operationResultFactory.Success(mappedResult)!;
         }
+
+        public Task<OperationResultSingle<AppointmentResponse?>> GenerateAppointmentRecipt(int appointmentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

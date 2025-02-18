@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Appointment.Response
+﻿namespace Application.Dtos.AppointmentDTO.Response
 {
     struct ServicePricePairResponse
     {
