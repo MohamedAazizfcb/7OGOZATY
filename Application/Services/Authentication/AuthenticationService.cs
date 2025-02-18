@@ -2,16 +2,21 @@
 using Application.Dtos.Authentication;
 using Application.Dtos.Authentication.Request;
 using Application.Dtos.Authentication.Response;
+using Application.Dtos.Clinic;
 using Application.Strategies.UserStrategies.CreateNewUserStrategy;
 using AutoMapper;
+using Domain.Entities.ClinicEntity;
 using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Interfaces.CommonInterfaces.OperationResultFactoryInterfaces;
+using Domain.Interfaces.UnitOfWorkInterfaces;
 using Domain.Interfaces.UtilityInterfaces.FileHandlerInterfaces;
 using Domain.Results;
+using Infrastructure.UnitOfWorkImplementation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Linq.Expressions;
 
 namespace Application.Services.Authentication
 {
@@ -25,8 +30,10 @@ namespace Application.Services.Authentication
         private readonly IFileHandler _fileHandler;
 
         private readonly CreateNewUserStrategyFactory _createNewUserStrategyFactory;
+        private readonly IUnitOfWork _unitOfWork;
+
         public AuthentictionService(UserManager<ApplicationUser> userManager, IJwtTokenService jwtTokenService, IMapper mapper, 
-            IOperationResultFactory operationResultFactory, IFileHandler fileHandler, 
+            IOperationResultFactory operationResultFactory, IFileHandler fileHandler, IUnitOfWork unitOfWork
             CreateNewUserStrategyFactory createNewUserStrategyFactory)
         {
             _userManager = userManager;
@@ -35,6 +42,7 @@ namespace Application.Services.Authentication
             _operationResultFactory = operationResultFactory;
             _fileHandler = fileHandler;
             _createNewUserStrategyFactory = createNewUserStrategyFactory;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<OperationResultSingle<string>> CreateUserAsync(BaseCreateUserRequest request, UserRolesEnum userRole)
@@ -69,6 +77,21 @@ namespace Application.Services.Authentication
             var token = await _jwtTokenService.GenerateTokenAsync(user);
             authResult = _mapper.Map<AuthenticationResponse>(user);
             authResult.Token = token;
+            if(user.ApplicationRoleId == (int) UserRolesEnum.Doctor)
+            {
+                authResult.doctorId = user.Id;
+            }
+
+            else if (user.ApplicationRoleId == (int)UserRolesEnum.Secretary)
+            {
+                var repository = _unitOfWork.GetRepository<Secretary>();
+                var result = await repository.GetByIdAsync(user.Id);
+                authResult.doctorId = result.DoctorId;
+            }
+            else
+            {
+                authResult.doctorId = null;
+            }
 
             return _operationResultFactory.Success(authResult);
         }

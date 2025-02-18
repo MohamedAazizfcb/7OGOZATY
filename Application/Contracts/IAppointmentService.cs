@@ -16,7 +16,9 @@ namespace Application.Contracts
         Task<OperationResultSingle<string>> RescheduleDayOfAppointments(RescheduleDayOfAppointmentsRequest request);
 
         Task<OperationResultSingle<AppointmentResponse?>> ChangeAppointmentStatus(int appointmentId, int newStatusId);
+        Task<OperationResultSingle<AppointmentResponse?>> GenerateAppointmentRecipt(int appointmentId);
 
+        
         Task<OperationResultSingle<string>> DeleteAsync(int id);
         Task<OperationResultSingle<ICollection<AppointmentResponse>>> GetPendingAppointmentsOfDoctor(int docId);
         Task<OperationResultSingle<string>> AddServiceForAppointment(AddServiceForAppointmentRequest request);

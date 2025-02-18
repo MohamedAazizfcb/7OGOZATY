@@ -33,6 +33,7 @@ namespace Application.Dtos.Authentication.Response
 
         public string? ApplicationRole_En { get; set; }
         public string? ApplicationRole_Ar { get; set; }
+        public int? doctorId { get; set; }
         public int? ApplicationRole_ID { get; set; }
     }
 }

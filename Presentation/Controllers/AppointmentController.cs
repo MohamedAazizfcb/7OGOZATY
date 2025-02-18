@@ -123,6 +123,14 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
+        [HttpPut("completeAppointment/{id}")]
+        public async Task<IActionResult> CompleteAppointment([FromRoute] int id)
+        {
+            await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Done);
+            var result = await _appointmentService.GenerateAppointmentRecipt(id);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
         [HttpPost("SearchForAppointmentsByOptionalParams")]
         public async Task<IActionResult> SearchForAppointments([FromBody] SearchAppointmentsRequest request)
         {

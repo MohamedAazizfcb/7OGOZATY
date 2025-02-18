@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Dtos.Appointment.Response
+﻿namespace Application.Dtos.Appointment.Response
 {
-    internal class AppointmentReceiptResponse
+    struct ServicePricePairResponse
     {
+        string ServiceName;
+        string ServicePrice;
+    }
+    public class AppointmentReceiptResponse
+    {
+        public string PatientName { get; set; }
+        public DateOnly AppointmentDate { get; set; }
+        public TimeOnly AppointmentTime { get; set; }
+        //public ICollection<ServicePricePairResponse> servicePricePairResponses { get; set; }
     }
 }
