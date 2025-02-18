@@ -16,10 +16,10 @@ namespace Domain.Entities.User
         public string? InsurancePolicyNumber { get; set; } = string.Empty;
 
 
-        public string EmergencyContactName { get; set; } = string.Empty; // Emergency contact name
-        public string EmergencyContactPhone { get; set; } = string.Empty; // Emergency contact phone
-        public string BloodType { get; set; } = string.Empty; // Patient's blood type
-        public string Notes { get; set; } = string.Empty; // Additional notes
+        public string? EmergencyContactName { get; set; } = string.Empty; // Emergency contact name
+        public string? EmergencyContactPhone { get; set; } = string.Empty; // Emergency contact phone
+        public string? BloodType { get; set; } = string.Empty; // Patient's blood type
+        public string? Notes { get; set; } = string.Empty; // Additional notes
 
         public virtual ICollection<Appointment>? Appointments { get; set; }
 

@@ -95,6 +95,33 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
+        [HttpPut("makeAppointmentArrived/{id}")]
+        public async Task<IActionResult> MakeAppointmentArrived([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Arrived);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPut("makeAppointmentNextInQueue/{id}")]
+        public async Task<IActionResult> MakeAppointmentNextInQueue([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.NextInQueue);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPut("startProgressingTheAppointment/{id}")]
+        public async Task<IActionResult> StartProgressingTheAppointment([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.InProgress);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
+        [HttpPut("makeAppointmentProccessed/{id}")]
+        public async Task<IActionResult> MakeAppointmentProccessed([FromRoute] int id)
+        {
+            var result = await _appointmentService.ChangeAppointmentStatus(id, (int)AppointmentStatusEnum.Proccessed);
+            return _responseFactory.CreateApiResponse(result);
+        }
 
         [HttpPost("SearchForAppointmentsByOptionalParams")]
         public async Task<IActionResult> SearchForAppointments([FromBody] SearchAppointmentsRequest request)

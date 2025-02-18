@@ -43,6 +43,11 @@ namespace Application.Services.Authentication
             return await strategy.CreateNewUser(request);
         }
 
+        //public async Task<OperationResultSingle<string>> CreatePartialPatient(CreatePartialPatientRequest request)
+        //{
+        //    var strategy = _createNewUserStrategyFactory.GetStrategy(UserRolesEnum.);
+        //    return await strategy.CreateNewUser(request);
+        //}
 
         public async Task<OperationResultSingle<AuthenticationResponse>> LoginAsync(LoginRequest request)
         {

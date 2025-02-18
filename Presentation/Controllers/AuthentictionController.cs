@@ -46,6 +46,13 @@ namespace Presentation.Controllers
             return _responseFactory.CreateApiResponse(result);
         }
 
+        [HttpPost("createPartialPatient")]
+        public async Task<IActionResult> CreatePartialPatient([FromForm] CreatePartialPatientRequest req)
+        {
+            var result = await _authenticationService.CreateUserAsync(req, Domain.Enums.UserRolesEnum.Patient);
+            return _responseFactory.CreateApiResponse(result);
+        }
+
         [HttpPost("createSecretary")]
         public async Task<IActionResult> CreateSecretary([FromForm] CreateSecretaryRequest req)
         {
